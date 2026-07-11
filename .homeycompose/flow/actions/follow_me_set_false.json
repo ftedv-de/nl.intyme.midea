@@ -1,0 +1,13 @@
+{
+	"id": "follow_me_set_false",
+	"title": {
+		"en": "Disable Follow Me",
+		"de": "Follow Me ausschalten",
+		"nl": "Follow Me uitschakelen"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=follow_me"
+    }]
+}

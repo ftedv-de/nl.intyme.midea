@@ -1,0 +1,25 @@
+{
+  "id": "airco_louver_set",
+  "title": {
+    "en": "Set louver position",
+    "de": "Lamellen-Position setzen"
+  },
+  "titleFormatted": {
+    "en": "Set louver position to [[position]]",
+    "de": "Lamellen-Position auf [[position]] setzen"
+  },
+  "args": [
+    {
+      "name": "position",
+      "type": "dropdown",
+      "values": [
+        { "id": "auto", "label": { "en": "Auto",       "de": "Auto"       } },
+        { "id": "p1",   "label": { "en": "Position 1", "de": "Position 1" } },
+        { "id": "p2",   "label": { "en": "Position 2", "de": "Position 2" } },
+        { "id": "p3",   "label": { "en": "Position 3", "de": "Position 3" } },
+        { "id": "p4",   "label": { "en": "Position 4", "de": "Position 4" } },
+        { "id": "p5",   "label": { "en": "Position 5", "de": "Position 5" } }
+      ]
+    }
+  ]
+}

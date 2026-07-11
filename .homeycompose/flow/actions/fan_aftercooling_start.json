@@ -1,0 +1,45 @@
+{
+  "title": {
+    "en": "Start fan-aftercooling (then turn off)",
+    "de": "Lüfter-Nachlauf starten (dann ausschalten)",
+    "nl": "Ventilator-nadraaien starten (en daarna uitschakelen)"
+  },
+  "titleFormatted": {
+    "en": "Start fan-aftercooling for [[minutes]] min at speed [[speed]], then turn off",
+    "de": "Lüfter-Nachlauf für [[minutes]] Min mit Stufe [[speed]] starten, dann ausschalten",
+    "nl": "Ventilator-nadraaien voor [[minutes]] min op stand [[speed]], daarna uitschakelen"
+  },
+  "hint": {
+    "en": "Switches the AC into fan mode, runs for the given duration, then powers it off. Useful for drying the indoor unit after cooling. Uses settings as defaults.",
+    "de": "Schaltet die Klimaanlage in den Lüfter-Modus, lässt sie die angegebene Zeit laufen und schaltet sie dann komplett aus. Trocknet das Innengerät nach dem Kühlen.",
+    "nl": "Zet de airco in ventilatormodus, laat hem de opgegeven tijd draaien en schakelt daarna uit."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=airco"
+    },
+    {
+      "type": "number",
+      "name": "minutes",
+      "title": { "en": "Duration (minutes)", "de": "Dauer (Minuten)", "nl": "Duur (minuten)" },
+      "min": 1,
+      "max": 240,
+      "step": 1,
+      "placeholder": { "en": "30", "de": "30", "nl": "30" }
+    },
+    {
+      "type": "dropdown",
+      "name": "speed",
+      "title": { "en": "Fan speed", "de": "Lüfterstufe", "nl": "Ventilatorsnelheid" },
+      "values": [
+        { "id": "silent", "label": { "en": "Silent", "de": "Leise",   "nl": "Stil" } },
+        { "id": "low",    "label": { "en": "Low",    "de": "Niedrig", "nl": "Laag" } },
+        { "id": "medium", "label": { "en": "Medium", "de": "Mittel",  "nl": "Middel" } },
+        { "id": "high",   "label": { "en": "High",   "de": "Hoch",    "nl": "Hoog" } },
+        { "id": "auto",   "label": { "en": "Auto",   "de": "Auto",    "nl": "Auto" } }
+      ]
+    }
+  ]
+}

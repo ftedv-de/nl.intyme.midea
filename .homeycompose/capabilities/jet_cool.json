@@ -1,0 +1,25 @@
+{
+	"type": "boolean",
+	"title": {
+		"en": "Jet Cool",
+		"de": "Jet Cool (Schnellkühlung)",
+		"nl": "Jet Cool"
+	},
+	"desc": {
+		"en": "Flash-cool boost mode for maximum cooling power",
+		"de": "Schnellkühl-Boost für maximale Kühlleistung",
+		"nl": "Maximale snelle koeling"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "button",
+	"icon": "/assets/jet_cool.svg",
+	"insightsTitleTrue": {
+		"en": "Jet Cool turned on",
+		"de": "Jet Cool eingeschaltet"
+	},
+	"insightsTitleFalse": {
+		"en": "Jet Cool turned off",
+		"de": "Jet Cool ausgeschaltet"
+	}
+}

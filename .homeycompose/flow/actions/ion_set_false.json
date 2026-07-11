@@ -1,0 +1,13 @@
+{
+	"id": "ion_set_false",
+	"title": {
+		"en": "Disable Ion mode",
+		"de": "Ionen-Modus ausschalten",
+		"nl": "Ionen-modus uitschakelen"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=ion_mode"
+    }]
+}

@@ -1,80 +1,366 @@
 [
-	{
-		"id": "polling_interval",
-		"type": "number",
-		"label": {
-			"en": "Polling interval",
-			"nl": "Polling-interval"
-		},
-		"value": 15,
-		"min": 15,
-		"max": 600,
-		"units": {
-			"en": "seconds",
-			"nl": "seconden"
-		}
-	},
-	{
-		"id": "debug_level",
-		"type": "dropdown",
-		"label": {
-			"en": "Debug level"
-		},
-		"value": "info",
-		"values": [
-			{
-				"id": "error",
-				"label": {
-					"en": "Error"
-				}
-			},
-			{
-				"id": "warn",
-				"label": {
-					"en": "Warning"
-				}
-			},
-			{
-				"id": "info",
-				"label": {
-					"en": "Information"
-				}
-			},
-			{
-				"id": "http",
-				"label": {
-					"en": "HTTP"
-				}
-			},
-			{
-				"id": "verbose",
-				"label": {
-					"en": "Verbose"
-				}
-			},
-			{
-				"id": "debug",
-				"label": {
-					"en": "Debug"
-				}
-			},
-			{
-				"id": "silly",
-				"label": {
-					"en": "Silly"
-				}
-			}
-		]
-	},
-	{
-		"id": "max_number_of_errors_before_device_unavailable",
-		"type": "number",
-		"label": {
-		  "en": "Maximum number of errors before device becomes unavailable.",
-		  "nl": "Maximale aantal fouten voordat het apparaat onbeschikbaar wordt."
-		},
-		"value": 5,
-		"min": 0,
-		"max": 20
-	}
+ {
+  "id": "polling_interval",
+  "type": "number",
+  "label": {
+   "en": "Polling interval",
+   "nl": "Polling-interval"
+  },
+  "value": 15,
+  "min": 15,
+  "max": 600,
+  "units": {
+   "en": "seconds",
+   "nl": "seconden"
+  }
+ },
+ {
+  "id": "debug_level",
+  "type": "dropdown",
+  "label": {
+   "en": "Debug level"
+  },
+  "value": "info",
+  "values": [
+   {
+    "id": "error",
+    "label": {
+     "en": "Error"
+    }
+   },
+   {
+    "id": "warn",
+    "label": {
+     "en": "Warning"
+    }
+   },
+   {
+    "id": "info",
+    "label": {
+     "en": "Information"
+    }
+   },
+   {
+    "id": "http",
+    "label": {
+     "en": "HTTP"
+    }
+   },
+   {
+    "id": "verbose",
+    "label": {
+     "en": "Verbose"
+    }
+   },
+   {
+    "id": "debug",
+    "label": {
+     "en": "Debug"
+    }
+   },
+   {
+    "id": "silly",
+    "label": {
+     "en": "Silly"
+    }
+   }
+  ]
+ },
+ {
+  "id": "max_number_of_errors_before_device_unavailable",
+  "type": "number",
+  "label": {
+   "en": "Maximum number of errors before device becomes unavailable.",
+   "nl": "Maximale aantal fouten voordat het apparaat onbeschikbaar wordt."
+  },
+  "value": 5,
+  "min": 0,
+  "max": 20
+ },
+ {
+  "type": "group",
+  "label": {
+   "en": "Fan after cooling",
+   "de": "Lüfter-Nachlauf nach Kühlen",
+   "nl": "Ventilator-nadraaien na koelen"
+  },
+  "children": [
+   {
+    "id": "fan_aftercooling_enabled",
+    "type": "checkbox",
+    "label": {
+     "en": "Enable fan-aftercooling",
+     "de": "Lüfter-Nachlauf aktivieren",
+     "nl": "Ventilator-nadraaien inschakelen"
+    },
+    "hint": {
+     "en": "Automatic mode: when the AC switches from cooling to off (e.g. you turn it off manually), the fan runs for the duration below, then powers off. For full control (e.g. trigger at a specific time/temperature) use the Flow action 'Start fan-aftercooling' instead.",
+     "de": "Automatik: Wenn die Klimaanlage vom Kühlen auf Aus wechselt (z.B. manuelles Ausschalten), läuft der Lüfter die unten eingestellte Zeit weiter und schaltet dann ab. Für volle Kontrolle (z.B. bei bestimmter Uhrzeit/Temperatur) lieber die Flow-Aktion 'Lüfter-Nachlauf starten' verwenden.",
+     "nl": "Automatisch: wanneer de airco van koelen naar uit schakelt, draait de ventilator de ingestelde tijd door. Voor volledige controle gebruik de Flow-actie 'Ventilator-nadraaien starten'."
+    },
+    "value": false
+   },
+   {
+    "id": "fan_aftercooling_minutes",
+    "type": "number",
+    "label": {
+     "en": "Duration",
+     "de": "Dauer",
+     "nl": "Duur"
+    },
+    "value": 30,
+    "min": 1,
+    "max": 120,
+    "units": {
+     "en": "minutes",
+     "de": "Minuten",
+     "nl": "minuten"
+    }
+   },
+   {
+    "id": "fan_aftercooling_speed",
+    "type": "dropdown",
+    "label": {
+     "en": "Fan speed",
+     "de": "Lüfterstufe",
+     "nl": "Ventilatorsnelheid"
+    },
+    "value": "low",
+    "values": [
+     {
+      "id": "silent",
+      "label": {
+       "en": "Silent",
+       "de": "Leise",
+       "nl": "Stil"
+      }
+     },
+     {
+      "id": "low",
+      "label": {
+       "en": "Low",
+       "de": "Niedrig",
+       "nl": "Laag"
+      }
+     },
+     {
+      "id": "medium",
+      "label": {
+       "en": "Medium",
+       "de": "Mittel",
+       "nl": "Middel"
+      }
+     },
+     {
+      "id": "high",
+      "label": {
+       "en": "High",
+       "de": "Hoch",
+       "nl": "Hoog"
+      }
+     },
+     {
+      "id": "auto",
+      "label": {
+       "en": "Auto",
+       "de": "Auto",
+       "nl": "Auto"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "type": "group",
+  "label": {
+   "en": "Presets (advanced)",
+   "de": "Presets (Fortgeschritten)",
+   "nl": "Presets (geavanceerd)"
+  },
+  "children": [
+   {
+    "id": "presets_json",
+    "type": "textarea",
+    "label": {
+     "en": "Custom presets (JSON)",
+     "de": "Eigene Presets (JSON)",
+     "nl": "Eigen presets (JSON)"
+    },
+    "hint": {
+     "en": "Override or add presets. Built-in: cooling_home, cooling_away, cooling_night, heating_home, heating_away, fan_only, off. Example: {\"my_preset\":{\"mode\":\"cool\",\"temp\":22,\"fan\":\"low\",\"ieco\":true}}. Apply via Flow action 'Activate preset'.",
+     "de": "Presets überschreiben oder ergänzen. Eingebaute: cooling_home, cooling_away, cooling_night, heating_home, heating_away, fan_only, off. Beispiel: {\"mein_preset\":{\"mode\":\"cool\",\"temp\":22,\"fan\":\"low\",\"ieco\":true}}. Anwenden über Flow-Aktion 'Preset aktivieren'.",
+     "nl": "Presets overschrijven of toevoegen. Toepassen via Flow-actie 'Preset activeren'."
+    },
+    "value": ""
+   }
+  ]
+ },
+ {
+  "type": "group",
+  "label": {
+   "en": "Energy polling",
+   "de": "Stromverbrauch-Abfrage",
+   "nl": "Energie-polling"
+  },
+  "children": [
+   {
+    "id": "poll_energy_interval",
+    "type": "number",
+    "label": {
+     "en": "Energy polling interval",
+     "de": "Abfrage-Intervall",
+     "nl": "Energie-polling-interval"
+    },
+    "hint": {
+     "en": "How often to query power consumption, humidity and defrost status. Set to 0 to disable. Longer intervals reduce load on the AC unit.",
+     "de": "Wie oft Stromverbrauch, Luftfeuchte und Abtaustatus abgefragt werden. 0 = aus. Längere Intervalle schonen die Klimaanlage.",
+     "nl": "Hoe vaak energieverbruik, vochtigheid en ontdooistatus opgevraagd worden. 0 = uit."
+    },
+    "value": 60,
+    "min": 0,
+    "max": 3600,
+    "units": {
+     "en": "seconds",
+     "de": "Sekunden",
+     "nl": "seconden"
+    }
+   }
+  ]
+ },
+ {
+  "type": "group",
+  "label": {
+   "en": "External thermostat",
+   "de": "Externer Thermostat",
+   "nl": "Externe thermostaat"
+  },
+  "children": [
+   {
+    "id": "ext_thermostat_enabled",
+    "type": "checkbox",
+    "label": {
+     "en": "Enable external thermostat",
+     "de": "Externen Thermostat aktivieren",
+     "nl": "Externe thermostaat inschakelen"
+    },
+    "hint": {
+     "en": "When enabled, the AC's target temperature will be adjusted automatically so that the external sensor reaches your setpoint. Send sensor readings via the Flow action 'Report external room temperature'.",
+     "de": "Wenn aktiviert, regelt die Klimaanlage so, dass der externe Sensor den unten eingestellten Sollwert erreicht. Sensorwerte über die Flow-Aktion 'Externe Raumtemperatur melden' senden.",
+     "nl": "Indien ingeschakeld past de airco zijn doeltemperatuur automatisch aan zodat de externe sensor het instelpunt bereikt. Sensorwaarden via de Flow-actie 'Externe kamertemperatuur melden'."
+    },
+    "value": false
+   },
+   {
+    "id": "ext_thermostat_setpoint",
+    "type": "number",
+    "label": {
+     "en": "Setpoint",
+     "de": "Sollwert",
+     "nl": "Instelpunt"
+    },
+    "hint": {
+     "en": "Target room temperature you want at the external sensor. Leave at 0 to use the current AC target temperature.",
+     "de": "Gewünschte Raumtemperatur am externen Sensor. 0 = AC-Soll als Referenz nutzen.",
+     "nl": "Gewenste kamertemperatuur bij de externe sensor. 0 = huidige AC-doeltemperatuur gebruiken."
+    },
+    "value": 0,
+    "min": 0,
+    "max": 35,
+    "units": {
+     "en": "°C",
+     "de": "°C",
+     "nl": "°C"
+    }
+   },
+   {
+    "id": "ext_thermostat_hysteresis",
+    "type": "number",
+    "label": {
+     "en": "Hysteresis",
+     "de": "Hysterese",
+     "nl": "Hysterese"
+    },
+    "hint": {
+     "en": "How far the external sensor may drift before the AC adjusts its target. Smaller = more reactive but more on/off swings.",
+     "de": "Wie weit der externe Sensor vom Sollwert abweichen darf, bevor die AC nachregelt. Kleiner = reaktiver, aber mehr Stellaktionen.",
+     "nl": "Hoever de externe sensor mag afwijken voordat de AC bijregelt."
+    },
+    "value": 0.5,
+    "min": 0.1,
+    "max": 5,
+    "units": {
+     "en": "K",
+     "de": "K",
+     "nl": "K"
+    }
+   },
+   {
+    "id": "ext_thermostat_timeout",
+    "type": "number",
+    "label": {
+     "en": "Timeout",
+     "de": "Timeout",
+     "nl": "Time-out"
+    },
+    "hint": {
+     "en": "If no external sensor reading is received within this time, the external thermostat is ignored (safety fallback).",
+     "de": "Wenn innerhalb dieser Zeit kein neuer externer Sensorwert eintrifft, wird der externe Thermostat ignoriert (Sicherheits-Fallback).",
+     "nl": "Als binnen deze tijd geen nieuwe externe sensorwaarde binnenkomt, wordt de externe thermostaat genegeerd."
+    },
+    "value": 30,
+    "min": 1,
+    "max": 1440,
+    "units": {
+     "en": "minutes",
+     "de": "Minuten",
+     "nl": "minuten"
+    }
+   },
+   {
+    "id": "ext_thermostat_offset",
+    "type": "number",
+    "label": {
+     "en": "Sensor offset",
+     "de": "Sensor-Offset",
+     "nl": "Sensor-offset"
+    },
+    "hint": {
+     "en": "Fixed correction added to the external sensor value. Useful if the sensor consistently reads too high or too low (e.g. due to placement). Range -5 to +5 K.",
+     "de": "Fester Korrekturwert, der auf den externen Sensorwert addiert wird. Nuetzlich wenn der Sensor durch seinen Standort systematisch zu warm oder zu kalt misst. Bereich -5 bis +5 K.",
+     "nl": "Vaste correctie op de externe sensorwaarde. Handig als de sensor door zijn positie te warm of te koud meet. Bereik -5 tot +5 K."
+    },
+    "value": 0,
+    "min": -5,
+    "max": 5,
+    "units": {
+     "en": "K",
+     "de": "K",
+     "nl": "K"
+    }
+   },
+   {
+    "id": "ext_thermostat_dwell",
+    "type": "number",
+    "label": {
+     "en": "Minimum dwell time",
+     "de": "Mindest-Verweildauer",
+     "nl": "Minimale wachttijd"
+    },
+    "hint": {
+     "en": "The external temperature must stay outside the hysteresis for this long before the AC setpoint is adjusted. Prevents rapid up/down corrections caused by SwitchBot's 0.5 K reporting steps. 0 = react immediately.",
+     "de": "Die externe Temperatur muss so lange konsistent ausserhalb der Hysterese liegen, bevor der AC-Sollwert angepasst wird. Verhindert schnelle Auf/Ab-Korrekturen durch die 0,5-K-Meldeschritte des SwitchBot. 0 = sofort reagieren.",
+     "nl": "De externe temperatuur moet zolang buiten de hysterese blijven voordat de AC-instelling wordt aangepast. Voorkomt snelle op/neer-correcties door de 0,5 K-meldstapjes van SwitchBot. 0 = direct reageren."
+    },
+    "value": 60,
+    "min": 0,
+    "max": 600,
+    "units": {
+     "en": "seconds",
+     "de": "Sekunden",
+     "nl": "seconden"
+    }
+   }
+  ]
+ }
 ]

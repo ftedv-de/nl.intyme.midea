@@ -1,0 +1,21 @@
+{
+  "id": "airco_swing_set",
+  "title": {
+    "en": "Set oscillation (swing)",
+    "de": "Lamellen-Schwenken setzen"
+  },
+  "titleFormatted": {
+    "en": "Set oscillation to [[swing]]",
+    "de": "Lamellen-Schwenken auf [[swing]] setzen"
+  },
+  "args": [
+    {
+      "name": "swing",
+      "type": "dropdown",
+      "values": [
+        { "id": "on",  "label": { "en": "On",  "de": "An"  } },
+        { "id": "off", "label": { "en": "Off", "de": "Aus" } }
+      ]
+    }
+  ]
+}

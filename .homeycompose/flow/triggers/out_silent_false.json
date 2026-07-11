@@ -1,0 +1,13 @@
+{
+	"id": "out_silent_false",
+	"title": {
+		"en": "Outdoor Silent is disabled",
+		"de": "Außengerät-Leise wurde ausgeschaltet",
+		"nl": "Buitenunit-stil is uitgeschakeld"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=out_silent"
+    }]
+}

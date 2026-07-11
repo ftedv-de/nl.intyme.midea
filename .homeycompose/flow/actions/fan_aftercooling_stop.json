@@ -1,0 +1,19 @@
+{
+  "title": {
+    "en": "Cancel fan-aftercooling",
+    "de": "Lüfter-Nachlauf abbrechen",
+    "nl": "Ventilator-nadraaien annuleren"
+  },
+  "hint": {
+    "en": "Cancels an active fan-aftercooling timer. Does not change the current AC state.",
+    "de": "Bricht einen laufenden Lüfter-Nachlauf ab. Aktueller Zustand der Klimaanlage bleibt unverändert.",
+    "nl": "Annuleert een actieve nadraai-timer. Verandert de huidige status van de airco niet."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=airco"
+    }
+  ]
+}

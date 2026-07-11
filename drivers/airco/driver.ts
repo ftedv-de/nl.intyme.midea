@@ -90,8 +90,19 @@ class MideaDriver extends Homey.Driver {
       return false;
     });
 
+    // Backward-Compat: alte 'thermostat_swing_mode_set'-Aktion auf neue airco_swing/airco_louver-Capabilities umleiten.
     this.homey.flow.getActionCard('thermostat_swing_mode_set').registerRunListener(async (args, state) => {
-      await args.device.onCapability("thermostat_swing_mode", args.swing_mode, null);
+      // off=Oszillation aus, alles andere=Oszillation an (PortaSplit hat nur horizontal)
+      const wantOn = args.swing_mode !== "off";
+      await args.device.onCapability("airco_swing", wantOn, null);
+    });
+
+    // Neue Flow-Actions fuer airco_swing / airco_louver
+    this.homey.flow.getActionCard('airco_swing_set').registerRunListener(async (args, state) => {
+      await args.device.onCapability("airco_swing", args.swing === "on", null);
+    });
+    this.homey.flow.getActionCard('airco_louver_set').registerRunListener(async (args, state) => {
+      await args.device.onCapability("airco_louver", args.position, null);
     });
 
     // THERMOSTAT MODE
@@ -113,6 +124,83 @@ class MideaDriver extends Homey.Driver {
 
     this.homey.flow.getActionCard('thermostat_mode_set').registerRunListener(async (args, state) => {
       await args.device.onCapability("thermostat_mode", args.thermostat_mode, null);
+    });
+
+    // === iECO ===
+    this.homey.flow.getActionCard('ieco_set_true').registerRunListener(async (args) => {
+      await args.device.onCapability("ieco", true, null);
+    });
+    this.homey.flow.getActionCard('ieco_set_false').registerRunListener(async (args) => {
+      await args.device.onCapability("ieco", false, null);
+    });
+    this.homey.flow.getConditionCard('ieco_is_true').registerRunListener(async (args) => {
+      return args.device.getCapabilityValue("ieco") === true;
+    });
+
+    // === Ion-Modus ===
+    this.homey.flow.getActionCard('ion_set_true').registerRunListener(async (args) => {
+      await args.device.onCapability("ion_mode", true, null);
+    });
+    this.homey.flow.getActionCard('ion_set_false').registerRunListener(async (args) => {
+      await args.device.onCapability("ion_mode", false, null);
+    });
+    this.homey.flow.getConditionCard('ion_is_true').registerRunListener(async (args) => {
+      return args.device.getCapabilityValue("ion_mode") === true;
+    });
+
+    // === Jet Cool ===
+    this.homey.flow.getActionCard('jet_cool_set_true').registerRunListener(async (args) => {
+      await args.device.onCapability("jet_cool", true, null);
+    });
+    this.homey.flow.getActionCard('jet_cool_set_false').registerRunListener(async (args) => {
+      await args.device.onCapability("jet_cool", false, null);
+    });
+    this.homey.flow.getConditionCard('jet_cool_is_true').registerRunListener(async (args) => {
+      return args.device.getCapabilityValue("jet_cool") === true;
+    });
+
+    // === Outdoor Silent ===
+    this.homey.flow.getActionCard('out_silent_set_true').registerRunListener(async (args) => {
+      await args.device.onCapability("out_silent", true, null);
+    });
+    this.homey.flow.getActionCard('out_silent_set_false').registerRunListener(async (args) => {
+      await args.device.onCapability("out_silent", false, null);
+    });
+    this.homey.flow.getConditionCard('out_silent_is_true').registerRunListener(async (args) => {
+      return args.device.getCapabilityValue("out_silent") === true;
+    });
+
+    // === Presets ===
+    this.homey.flow.getActionCard('preset_activate').registerRunListener(async (args) => {
+      const presetId = (args.preset && (args.preset.id || args.preset)) as string;
+      await (args.device as any).applyPreset(presetId);
+    });
+
+    // === Fan-Nachlauf manuell via Flow ===
+    this.homey.flow.getActionCard('fan_aftercooling_start').registerRunListener(async (args) => {
+      const minutes = Number(args.minutes);
+      const speed = (args.speed && (args.speed.id || args.speed)) as string;
+      await (args.device as any).runFanAftercooling(minutes, speed, false);
+    });
+    this.homey.flow.getActionCard('fan_aftercooling_stop').registerRunListener(async (args) => {
+      (args.device as any).cancelFanAftercooling();
+    });
+
+    // === Follow Me ===
+    this.homey.flow.getActionCard('follow_me_set_true').registerRunListener(async (args) => {
+      await (args.device as any).setFollowMe(true);
+    });
+    this.homey.flow.getActionCard('follow_me_set_false').registerRunListener(async (args) => {
+      await (args.device as any).setFollowMe(false);
+    });
+    this.homey.flow.getConditionCard('follow_me_is_true').registerRunListener(async (args) => {
+      return args.device.getCapabilityValue("follow_me") === true;
+    });
+
+    // === External Thermostat ===
+    this.homey.flow.getActionCard('report_external_temperature').registerRunListener(async (args) => {
+      const t = Number(args.temperature);
+      await (args.device as any).reportExternalRoomTemperature(t);
     });
   }
 

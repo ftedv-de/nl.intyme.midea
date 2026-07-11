@@ -1,0 +1,14 @@
+{
+	"id": "ion_is_true",
+	"$filter": "capabilities=ion_mode",
+	"title": {
+		"en": "Ion mode is !{{enabled|disabled}}",
+		"de": "Ionen-Modus ist !{{eingeschaltet|ausgeschaltet}}",
+		"nl": "Ionen-modus is !{{ingeschakeld|uitgeschakeld}}"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=ion_mode"
+    }]
+}

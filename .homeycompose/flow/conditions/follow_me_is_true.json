@@ -1,0 +1,14 @@
+{
+	"id": "follow_me_is_true",
+	"$filter": "capabilities=follow_me",
+	"title": {
+		"en": "Follow Me is !{{enabled|disabled}}",
+		"de": "Follow Me ist !{{eingeschaltet|ausgeschaltet}}",
+		"nl": "Follow Me is !{{ingeschakeld|uitgeschakeld}}"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=follow_me"
+    }]
+}

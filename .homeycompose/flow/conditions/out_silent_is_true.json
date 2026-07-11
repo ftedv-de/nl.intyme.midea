@@ -1,0 +1,14 @@
+{
+	"id": "out_silent_is_true",
+	"$filter": "capabilities=out_silent",
+	"title": {
+		"en": "Outdoor Silent is !{{enabled|disabled}}",
+		"de": "Außengerät-Leise ist !{{eingeschaltet|ausgeschaltet}}",
+		"nl": "Buitenunit-stil is !{{ingeschakeld|uitgeschakeld}}"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=out_silent"
+    }]
+}

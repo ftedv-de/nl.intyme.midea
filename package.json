@@ -1,10 +1,11 @@
 {
   "name": "nl.intyme.midea",
-  "version": "1.0.18",
+  "version": "1.0.27",
   "main": "app.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "postinstall": "node scripts/patch-midea-lib.js && node scripts/build-app-json.js"
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.1",

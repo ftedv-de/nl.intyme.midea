@@ -1,0 +1,13 @@
+{
+	"id": "out_silent_set_true",
+	"title": {
+		"en": "Enable Outdoor Silent",
+		"de": "Außengerät leise einschalten",
+		"nl": "Buitenunit stil inschakelen"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=out_silent"
+    }]
+}

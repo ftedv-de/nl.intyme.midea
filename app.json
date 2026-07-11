@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.intyme.midea",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "bugs": {
     "url": "https://github.com/mteutelink/nl.intyme.midea/issues"
   },
@@ -42,6 +42,156 @@
   "brandColor": "#498ff2",
   "flow": {
     "triggers": [
+      {
+        "id": "follow_me_false",
+        "title": {
+          "en": "Follow Me is disabled",
+          "de": "Follow Me wurde ausgeschaltet",
+          "nl": "Follow Me is uitgeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=follow_me"
+          }
+        ]
+      },
+      {
+        "id": "follow_me_true",
+        "title": {
+          "en": "Follow Me is enabled",
+          "de": "Follow Me wurde eingeschaltet",
+          "nl": "Follow Me is ingeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=follow_me"
+          }
+        ]
+      },
+      {
+        "id": "ieco_false",
+        "title": {
+          "en": "iECO is disabled",
+          "de": "iECO wurde ausgeschaltet",
+          "nl": "iECO is uitgeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ieco"
+          }
+        ]
+      },
+      {
+        "id": "ieco_true",
+        "title": {
+          "en": "iECO is enabled",
+          "de": "iECO wurde eingeschaltet",
+          "nl": "iECO is ingeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ieco"
+          }
+        ]
+      },
+      {
+        "id": "ion_false",
+        "title": {
+          "en": "Ion mode is disabled",
+          "de": "Ionen-Modus wurde ausgeschaltet",
+          "nl": "Ionen-modus is uitgeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ion_mode"
+          }
+        ]
+      },
+      {
+        "id": "ion_true",
+        "title": {
+          "en": "Ion mode is enabled",
+          "de": "Ionen-Modus wurde eingeschaltet",
+          "nl": "Ionen-modus is ingeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ion_mode"
+          }
+        ]
+      },
+      {
+        "id": "jet_cool_false",
+        "title": {
+          "en": "Jet Cool is disabled",
+          "de": "Jet Cool wurde ausgeschaltet",
+          "nl": "Jet Cool is uitgeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=jet_cool"
+          }
+        ]
+      },
+      {
+        "id": "jet_cool_true",
+        "title": {
+          "en": "Jet Cool is enabled",
+          "de": "Jet Cool wurde eingeschaltet",
+          "nl": "Jet Cool is ingeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=jet_cool"
+          }
+        ]
+      },
+      {
+        "id": "out_silent_false",
+        "title": {
+          "en": "Outdoor Silent is disabled",
+          "de": "Außengerät-Leise wurde ausgeschaltet",
+          "nl": "Buitenunit-stil is uitgeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=out_silent"
+          }
+        ]
+      },
+      {
+        "id": "out_silent_true",
+        "title": {
+          "en": "Outdoor Silent is enabled",
+          "de": "Außengerät-Leise wurde eingeschaltet",
+          "nl": "Buitenunit-stil is ingeschakeld"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=out_silent"
+          }
+        ]
+      },
       {
         "id": "thermostat_boost_false",
         "title": {
@@ -158,7 +308,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_fan_speed"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "Fan speed changed to [[fan_speed]]",
+          "nl": "Ventilatorsnelheid veranderd naar [[fan_speed]]",
+          "de": "Ventilatorstufe geaendert auf [[fan_speed]]"
+        }
       },
       {
         "id": "thermostat_freeze_protection_false",
@@ -248,7 +403,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_mode"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "Thermostat mode changed to [[thermostat_mode]]",
+          "nl": "Thermostaatmodus veranderd naar [[thermostat_mode]]",
+          "de": "Thermostat-Modus geaendert auf [[thermostat_mode]]"
+        }
       },
       {
         "id": "thermostat_swing_mode_changed",
@@ -296,10 +456,90 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_swing_mode"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "Swing mode changed to [[swing_mode]]",
+          "nl": "Zwaaimodus veranderd naar [[swing_mode]]",
+          "de": "Schwenkmodus geaendert auf [[swing_mode]]"
+        }
       }
     ],
     "conditions": [
+      {
+        "id": "follow_me_is_true",
+        "title": {
+          "en": "Follow Me is !{{enabled|disabled}}",
+          "de": "Follow Me ist !{{eingeschaltet|ausgeschaltet}}",
+          "nl": "Follow Me is !{{ingeschakeld|uitgeschakeld}}"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=follow_me"
+          }
+        ]
+      },
+      {
+        "id": "ieco_is_true",
+        "title": {
+          "en": "iECO is !{{enabled|disabled}}",
+          "de": "iECO ist !{{eingeschaltet|ausgeschaltet}}",
+          "nl": "iECO is !{{ingeschakeld|uitgeschakeld}}"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ieco"
+          }
+        ]
+      },
+      {
+        "id": "ion_is_true",
+        "title": {
+          "en": "Ion mode is !{{enabled|disabled}}",
+          "de": "Ionen-Modus ist !{{eingeschaltet|ausgeschaltet}}",
+          "nl": "Ionen-modus is !{{ingeschakeld|uitgeschakeld}}"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ion_mode"
+          }
+        ]
+      },
+      {
+        "id": "jet_cool_is_true",
+        "title": {
+          "en": "Jet Cool is !{{enabled|disabled}}",
+          "de": "Jet Cool ist !{{eingeschaltet|ausgeschaltet}}",
+          "nl": "Jet Cool is !{{ingeschakeld|uitgeschakeld}}"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=jet_cool"
+          }
+        ]
+      },
+      {
+        "id": "out_silent_is_true",
+        "title": {
+          "en": "Outdoor Silent is !{{enabled|disabled}}",
+          "de": "Außengerät-Leise ist !{{eingeschaltet|ausgeschaltet}}",
+          "nl": "Buitenunit-stil is !{{ingeschakeld|uitgeschakeld}}"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=out_silent"
+          }
+        ]
+      },
       {
         "id": "thermostat_boost_is_true",
         "title": {
@@ -388,7 +628,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_fan_speed"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "The fan speed !{{is|isn't}} [[fan_speed]]",
+          "nl": "De ventilatorsnelheid !{{is|is niet}} [[fan_speed]]",
+          "de": "Die Ventilatorstufe !{{ist|ist nicht}} [[fan_speed]]"
+        }
       },
       {
         "id": "thermostat_freeze_protection_is_true",
@@ -464,7 +709,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_mode"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "The thermostat mode !{{is|isn't}} [[thermostat_mode]]",
+          "nl": "De thermostaatmodus !{{is|is niet}} [[thermostat_mode]]",
+          "de": "Der Thermostat-Modus !{{ist|ist nicht}} [[thermostat_mode]]"
+        }
       },
       {
         "id": "thermostat_swing_mode_is",
@@ -512,10 +762,501 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_swing_mode"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "The swing mode !{{is|isn't}} [[swing_mode]]",
+          "nl": "De zwaaimodus !{{is|is niet}} [[swing_mode]]",
+          "de": "Der Schwenkmodus !{{ist|ist nicht}} [[swing_mode]]"
+        }
       }
     ],
     "actions": [
+      {
+        "id": "airco_louver_set",
+        "title": {
+          "en": "Set louver position",
+          "de": "Lamellen-Position setzen"
+        },
+        "titleFormatted": {
+          "en": "Set louver position to [[position]]",
+          "de": "Lamellen-Position auf [[position]] setzen"
+        },
+        "args": [
+          {
+            "name": "position",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto",
+                  "de": "Auto"
+                }
+              },
+              {
+                "id": "p1",
+                "label": {
+                  "en": "Position 1",
+                  "de": "Position 1"
+                }
+              },
+              {
+                "id": "p2",
+                "label": {
+                  "en": "Position 2",
+                  "de": "Position 2"
+                }
+              },
+              {
+                "id": "p3",
+                "label": {
+                  "en": "Position 3",
+                  "de": "Position 3"
+                }
+              },
+              {
+                "id": "p4",
+                "label": {
+                  "en": "Position 4",
+                  "de": "Position 4"
+                }
+              },
+              {
+                "id": "p5",
+                "label": {
+                  "en": "Position 5",
+                  "de": "Position 5"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "airco_swing_set",
+        "title": {
+          "en": "Set oscillation (swing)",
+          "de": "Lamellen-Schwenken setzen"
+        },
+        "titleFormatted": {
+          "en": "Set oscillation to [[swing]]",
+          "de": "Lamellen-Schwenken auf [[swing]] setzen"
+        },
+        "args": [
+          {
+            "name": "swing",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "label": {
+                  "en": "On",
+                  "de": "An"
+                }
+              },
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "Start fan-aftercooling (then turn off)",
+          "de": "Lüfter-Nachlauf starten (dann ausschalten)",
+          "nl": "Ventilator-nadraaien starten (en daarna uitschakelen)"
+        },
+        "titleFormatted": {
+          "en": "Start fan-aftercooling for [[minutes]] min at speed [[speed]], then turn off",
+          "de": "Lüfter-Nachlauf für [[minutes]] Min mit Stufe [[speed]] starten, dann ausschalten",
+          "nl": "Ventilator-nadraaien voor [[minutes]] min op stand [[speed]], daarna uitschakelen"
+        },
+        "hint": {
+          "en": "Switches the AC into fan mode, runs for the given duration, then powers it off. Useful for drying the indoor unit after cooling. Uses settings as defaults.",
+          "de": "Schaltet die Klimaanlage in den Lüfter-Modus, lässt sie die angegebene Zeit laufen und schaltet sie dann komplett aus. Trocknet das Innengerät nach dem Kühlen.",
+          "nl": "Zet de airco in ventilatormodus, laat hem de opgegeven tijd draaien en schakelt daarna uit."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=airco"
+          },
+          {
+            "type": "number",
+            "name": "minutes",
+            "title": {
+              "en": "Duration (minutes)",
+              "de": "Dauer (Minuten)",
+              "nl": "Duur (minuten)"
+            },
+            "min": 1,
+            "max": 240,
+            "step": 1,
+            "placeholder": {
+              "en": "30",
+              "de": "30",
+              "nl": "30"
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "speed",
+            "title": {
+              "en": "Fan speed",
+              "de": "Lüfterstufe",
+              "nl": "Ventilatorsnelheid"
+            },
+            "values": [
+              {
+                "id": "silent",
+                "label": {
+                  "en": "Silent",
+                  "de": "Leise",
+                  "nl": "Stil"
+                }
+              },
+              {
+                "id": "low",
+                "label": {
+                  "en": "Low",
+                  "de": "Niedrig",
+                  "nl": "Laag"
+                }
+              },
+              {
+                "id": "medium",
+                "label": {
+                  "en": "Medium",
+                  "de": "Mittel",
+                  "nl": "Middel"
+                }
+              },
+              {
+                "id": "high",
+                "label": {
+                  "en": "High",
+                  "de": "Hoch",
+                  "nl": "Hoog"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto",
+                  "de": "Auto",
+                  "nl": "Auto"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_aftercooling_start"
+      },
+      {
+        "title": {
+          "en": "Cancel fan-aftercooling",
+          "de": "Lüfter-Nachlauf abbrechen",
+          "nl": "Ventilator-nadraaien annuleren"
+        },
+        "hint": {
+          "en": "Cancels an active fan-aftercooling timer. Does not change the current AC state.",
+          "de": "Bricht einen laufenden Lüfter-Nachlauf ab. Aktueller Zustand der Klimaanlage bleibt unverändert.",
+          "nl": "Annuleert een actieve nadraai-timer. Verandert de huidige status van de airco niet."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=airco"
+          }
+        ],
+        "id": "fan_aftercooling_stop"
+      },
+      {
+        "id": "follow_me_set_false",
+        "title": {
+          "en": "Disable Follow Me",
+          "de": "Follow Me ausschalten",
+          "nl": "Follow Me uitschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=follow_me"
+          }
+        ]
+      },
+      {
+        "id": "follow_me_set_true",
+        "title": {
+          "en": "Enable Follow Me",
+          "de": "Follow Me einschalten",
+          "nl": "Follow Me inschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=follow_me"
+          }
+        ]
+      },
+      {
+        "id": "ieco_set_false",
+        "title": {
+          "en": "Disable iECO",
+          "de": "iECO ausschalten",
+          "nl": "iECO uitschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ieco"
+          }
+        ]
+      },
+      {
+        "id": "ieco_set_true",
+        "title": {
+          "en": "Enable iECO",
+          "de": "iECO einschalten",
+          "nl": "iECO inschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ieco"
+          }
+        ]
+      },
+      {
+        "id": "ion_set_false",
+        "title": {
+          "en": "Disable Ion mode",
+          "de": "Ionen-Modus ausschalten",
+          "nl": "Ionen-modus uitschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ion_mode"
+          }
+        ]
+      },
+      {
+        "id": "ion_set_true",
+        "title": {
+          "en": "Enable Ion mode",
+          "de": "Ionen-Modus einschalten",
+          "nl": "Ionen-modus inschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=ion_mode"
+          }
+        ]
+      },
+      {
+        "id": "jet_cool_set_false",
+        "title": {
+          "en": "Disable Jet Cool",
+          "de": "Jet Cool ausschalten",
+          "nl": "Jet Cool uitschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=jet_cool"
+          }
+        ]
+      },
+      {
+        "id": "jet_cool_set_true",
+        "title": {
+          "en": "Enable Jet Cool",
+          "de": "Jet Cool einschalten",
+          "nl": "Jet Cool inschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=jet_cool"
+          }
+        ]
+      },
+      {
+        "id": "out_silent_set_false",
+        "title": {
+          "en": "Disable Outdoor Silent",
+          "de": "Außengerät leise ausschalten",
+          "nl": "Buitenunit stil uitschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=out_silent"
+          }
+        ]
+      },
+      {
+        "id": "out_silent_set_true",
+        "title": {
+          "en": "Enable Outdoor Silent",
+          "de": "Außengerät leise einschalten",
+          "nl": "Buitenunit stil inschakelen"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=airco&capabilities=out_silent"
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "Activate preset",
+          "de": "Preset aktivieren",
+          "nl": "Preset activeren"
+        },
+        "titleFormatted": {
+          "en": "Activate preset [[preset]]",
+          "de": "Preset [[preset]] aktivieren",
+          "nl": "Preset [[preset]] activeren"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=airco"
+          },
+          {
+            "type": "dropdown",
+            "name": "preset",
+            "title": {
+              "en": "Preset",
+              "de": "Preset",
+              "nl": "Preset"
+            },
+            "values": [
+              {
+                "id": "cooling_home",
+                "label": {
+                  "en": "Cooling – Home",
+                  "de": "Kühlen – Zuhause",
+                  "nl": "Koelen – Thuis"
+                }
+              },
+              {
+                "id": "cooling_away",
+                "label": {
+                  "en": "Cooling – Away",
+                  "de": "Kühlen – Abwesend",
+                  "nl": "Koelen – Afwezig"
+                }
+              },
+              {
+                "id": "cooling_night",
+                "label": {
+                  "en": "Cooling – Night",
+                  "de": "Kühlen – Nacht",
+                  "nl": "Koelen – Nacht"
+                }
+              },
+              {
+                "id": "heating_home",
+                "label": {
+                  "en": "Heating – Home",
+                  "de": "Heizen – Zuhause",
+                  "nl": "Verwarmen – Thuis"
+                }
+              },
+              {
+                "id": "heating_away",
+                "label": {
+                  "en": "Heating – Away",
+                  "de": "Heizen – Abwesend",
+                  "nl": "Verwarmen – Afwezig"
+                }
+              },
+              {
+                "id": "fan_only",
+                "label": {
+                  "en": "Fan only",
+                  "de": "Nur Lüfter",
+                  "nl": "Alleen ventilator"
+                }
+              },
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus",
+                  "nl": "Uit"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "preset_activate"
+      },
+      {
+        "id": "report_external_temperature",
+        "title": {
+          "en": "Report external room temperature",
+          "de": "Externe Raumtemperatur melden",
+          "nl": "Externe kamertemperatuur melden"
+        },
+        "titleFormatted": {
+          "en": "Report external room temperature [[temperature]] °C",
+          "de": "Externe Raumtemperatur [[temperature]] °C melden",
+          "nl": "Externe kamertemperatuur [[temperature]] °C melden"
+        },
+        "hint": {
+          "en": "Sends a temperature reading from an external sensor (e.g. another Homey thermometer) to the AC. With 'External thermostat' enabled in settings, the AC will adjust its target temperature so the room reaches your setpoint based on this external sensor.",
+          "de": "Sendet eine Temperatur von einem externen Sensor (z.B. einem anderen Homey-Thermometer) an die Klimaanlage. Wenn in den Einstellungen 'Externer Thermostat' aktiviert ist, regelt die Klimaanlage so, dass dieser Sensor den gewünschten Sollwert erreicht.",
+          "nl": "Stuurt een temperatuurwaarde van een externe sensor naar de airco. Bij ingeschakelde 'Externe thermostaat' regelt de airco op deze externe sensor."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=airco"
+          },
+          {
+            "type": "number",
+            "name": "temperature",
+            "title": {
+              "en": "Temperature (°C)",
+              "de": "Temperatur (°C)",
+              "nl": "Temperatuur (°C)"
+            },
+            "min": -10,
+            "max": 60,
+            "step": 0.1,
+            "placeholder": {
+              "en": "22.5",
+              "de": "22,5",
+              "nl": "22,5"
+            }
+          }
+        ]
+      },
       {
         "id": "thermostat_boost_set_false",
         "title": {
@@ -632,7 +1373,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_fan_speed"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "Set fan speed to [[fan_speed]]",
+          "nl": "Ventilatorsnelheid instellen op [[fan_speed]]",
+          "de": "Ventilatorstufe auf [[fan_speed]] setzen"
+        }
       },
       {
         "id": "thermostat_freeze_protection_set_false",
@@ -722,7 +1468,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_mode"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "Set thermostat mode to [[thermostat_mode]]",
+          "nl": "Thermostaatmodus instellen op [[thermostat_mode]]",
+          "de": "Thermostat-Modus auf [[thermostat_mode]] setzen"
+        }
       },
       {
         "id": "thermostat_swing_mode_set",
@@ -770,7 +1521,12 @@
             "type": "device",
             "filter": "driver_id=airco&capabilities=thermostat_swing_mode"
           }
-        ]
+        ],
+        "titleFormatted": {
+          "en": "Set swing mode to [[swing_mode]]",
+          "nl": "Zwaaimodus instellen op [[swing_mode]]",
+          "de": "Schwenkmodus auf [[swing_mode]] setzen"
+        }
       }
     ]
   },
@@ -785,13 +1541,19 @@
         "onoff",
         "thermostat_mode",
         "target_temperature",
+        "thermostat_fan_speed",
+        "airco_swing",
+        "airco_louver",
         "measure_temperature",
         "measure_temperature.outside",
         "thermostat_boost",
-        "thermostat_fan_speed",
-        "thermostat_swing_mode",
         "thermostat_eco",
-        "thermostat_freeze_protection"
+        "thermostat_freeze_protection",
+        "ieco",
+        "ion_mode",
+        "jet_cool",
+        "out_silent",
+        "follow_me"
       ],
       "capabilitiesOptions": {
         "target_temperature": {
@@ -802,13 +1564,36 @@
         "measure_temperature": {
           "title": {
             "en": "Inside temperature",
+            "de": "Innentemperatur",
             "nl": "Binnentemperatuur"
           }
         },
         "measure_temperature.outside": {
           "title": {
             "en": "Outside temperature",
+            "de": "Außentemperatur",
             "nl": "Buitentemperatuur"
+          }
+        },
+        "measure_power": {
+          "title": {
+            "en": "Power consumption",
+            "de": "Stromverbrauch",
+            "nl": "Stroomverbruik"
+          }
+        },
+        "meter_power": {
+          "title": {
+            "en": "Energy total",
+            "de": "Energie gesamt",
+            "nl": "Energie totaal"
+          }
+        },
+        "measure_humidity": {
+          "title": {
+            "en": "Humidity",
+            "de": "Luftfeuchte",
+            "nl": "Vochtigheid"
           }
         }
       },
@@ -941,11 +1726,514 @@
           "value": 5,
           "min": 0,
           "max": 20
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Fan after cooling",
+            "de": "Lüfter-Nachlauf nach Kühlen",
+            "nl": "Ventilator-nadraaien na koelen"
+          },
+          "children": [
+            {
+              "id": "fan_aftercooling_enabled",
+              "type": "checkbox",
+              "label": {
+                "en": "Enable fan-aftercooling",
+                "de": "Lüfter-Nachlauf aktivieren",
+                "nl": "Ventilator-nadraaien inschakelen"
+              },
+              "hint": {
+                "en": "Automatic mode: when the AC switches from cooling to off (e.g. you turn it off manually), the fan runs for the duration below, then powers off. For full control (e.g. trigger at a specific time/temperature) use the Flow action 'Start fan-aftercooling' instead.",
+                "de": "Automatik: Wenn die Klimaanlage vom Kühlen auf Aus wechselt (z.B. manuelles Ausschalten), läuft der Lüfter die unten eingestellte Zeit weiter und schaltet dann ab. Für volle Kontrolle (z.B. bei bestimmter Uhrzeit/Temperatur) lieber die Flow-Aktion 'Lüfter-Nachlauf starten' verwenden.",
+                "nl": "Automatisch: wanneer de airco van koelen naar uit schakelt, draait de ventilator de ingestelde tijd door. Voor volledige controle gebruik de Flow-actie 'Ventilator-nadraaien starten'."
+              },
+              "value": false
+            },
+            {
+              "id": "fan_aftercooling_minutes",
+              "type": "number",
+              "label": {
+                "en": "Duration",
+                "de": "Dauer",
+                "nl": "Duur"
+              },
+              "value": 30,
+              "min": 1,
+              "max": 120,
+              "units": {
+                "en": "minutes",
+                "de": "Minuten",
+                "nl": "minuten"
+              }
+            },
+            {
+              "id": "fan_aftercooling_speed",
+              "type": "dropdown",
+              "label": {
+                "en": "Fan speed",
+                "de": "Lüfterstufe",
+                "nl": "Ventilatorsnelheid"
+              },
+              "value": "low",
+              "values": [
+                {
+                  "id": "silent",
+                  "label": {
+                    "en": "Silent",
+                    "de": "Leise",
+                    "nl": "Stil"
+                  }
+                },
+                {
+                  "id": "low",
+                  "label": {
+                    "en": "Low",
+                    "de": "Niedrig",
+                    "nl": "Laag"
+                  }
+                },
+                {
+                  "id": "medium",
+                  "label": {
+                    "en": "Medium",
+                    "de": "Mittel",
+                    "nl": "Middel"
+                  }
+                },
+                {
+                  "id": "high",
+                  "label": {
+                    "en": "High",
+                    "de": "Hoch",
+                    "nl": "Hoog"
+                  }
+                },
+                {
+                  "id": "auto",
+                  "label": {
+                    "en": "Auto",
+                    "de": "Auto",
+                    "nl": "Auto"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Presets (advanced)",
+            "de": "Presets (Fortgeschritten)",
+            "nl": "Presets (geavanceerd)"
+          },
+          "children": [
+            {
+              "id": "presets_json",
+              "type": "textarea",
+              "label": {
+                "en": "Custom presets (JSON)",
+                "de": "Eigene Presets (JSON)",
+                "nl": "Eigen presets (JSON)"
+              },
+              "hint": {
+                "en": "Override or add presets. Built-in: cooling_home, cooling_away, cooling_night, heating_home, heating_away, fan_only, off. Example: {\"my_preset\":{\"mode\":\"cool\",\"temp\":22,\"fan\":\"low\",\"ieco\":true}}. Apply via Flow action 'Activate preset'.",
+                "de": "Presets überschreiben oder ergänzen. Eingebaute: cooling_home, cooling_away, cooling_night, heating_home, heating_away, fan_only, off. Beispiel: {\"mein_preset\":{\"mode\":\"cool\",\"temp\":22,\"fan\":\"low\",\"ieco\":true}}. Anwenden über Flow-Aktion 'Preset aktivieren'.",
+                "nl": "Presets overschrijven of toevoegen. Toepassen via Flow-actie 'Preset activeren'."
+              },
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Energy polling",
+            "de": "Stromverbrauch-Abfrage",
+            "nl": "Energie-polling"
+          },
+          "children": [
+            {
+              "id": "poll_energy_interval",
+              "type": "number",
+              "label": {
+                "en": "Energy polling interval",
+                "de": "Abfrage-Intervall",
+                "nl": "Energie-polling-interval"
+              },
+              "hint": {
+                "en": "How often to query power consumption, humidity and defrost status. Set to 0 to disable. Longer intervals reduce load on the AC unit.",
+                "de": "Wie oft Stromverbrauch, Luftfeuchte und Abtaustatus abgefragt werden. 0 = aus. Längere Intervalle schonen die Klimaanlage.",
+                "nl": "Hoe vaak energieverbruik, vochtigheid en ontdooistatus opgevraagd worden. 0 = uit."
+              },
+              "value": 60,
+              "min": 0,
+              "max": 3600,
+              "units": {
+                "en": "seconds",
+                "de": "Sekunden",
+                "nl": "seconden"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "External thermostat",
+            "de": "Externer Thermostat",
+            "nl": "Externe thermostaat"
+          },
+          "children": [
+            {
+              "id": "ext_thermostat_enabled",
+              "type": "checkbox",
+              "label": {
+                "en": "Enable external thermostat",
+                "de": "Externen Thermostat aktivieren",
+                "nl": "Externe thermostaat inschakelen"
+              },
+              "hint": {
+                "en": "When enabled, the AC's target temperature will be adjusted automatically so that the external sensor reaches your setpoint. Send sensor readings via the Flow action 'Report external room temperature'.",
+                "de": "Wenn aktiviert, regelt die Klimaanlage so, dass der externe Sensor den unten eingestellten Sollwert erreicht. Sensorwerte über die Flow-Aktion 'Externe Raumtemperatur melden' senden.",
+                "nl": "Indien ingeschakeld past de airco zijn doeltemperatuur automatisch aan zodat de externe sensor het instelpunt bereikt. Sensorwaarden via de Flow-actie 'Externe kamertemperatuur melden'."
+              },
+              "value": false
+            },
+            {
+              "id": "ext_thermostat_setpoint",
+              "type": "number",
+              "label": {
+                "en": "Setpoint",
+                "de": "Sollwert",
+                "nl": "Instelpunt"
+              },
+              "hint": {
+                "en": "Target room temperature you want at the external sensor. Leave at 0 to use the current AC target temperature.",
+                "de": "Gewünschte Raumtemperatur am externen Sensor. 0 = AC-Soll als Referenz nutzen.",
+                "nl": "Gewenste kamertemperatuur bij de externe sensor. 0 = huidige AC-doeltemperatuur gebruiken."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 35,
+              "units": {
+                "en": "°C",
+                "de": "°C",
+                "nl": "°C"
+              }
+            },
+            {
+              "id": "ext_thermostat_hysteresis",
+              "type": "number",
+              "label": {
+                "en": "Hysteresis",
+                "de": "Hysterese",
+                "nl": "Hysterese"
+              },
+              "hint": {
+                "en": "How far the external sensor may drift before the AC adjusts its target. Smaller = more reactive but more on/off swings.",
+                "de": "Wie weit der externe Sensor vom Sollwert abweichen darf, bevor die AC nachregelt. Kleiner = reaktiver, aber mehr Stellaktionen.",
+                "nl": "Hoever de externe sensor mag afwijken voordat de AC bijregelt."
+              },
+              "value": 0.5,
+              "min": 0.1,
+              "max": 5,
+              "units": {
+                "en": "K",
+                "de": "K",
+                "nl": "K"
+              }
+            },
+            {
+              "id": "ext_thermostat_timeout",
+              "type": "number",
+              "label": {
+                "en": "Timeout",
+                "de": "Timeout",
+                "nl": "Time-out"
+              },
+              "hint": {
+                "en": "If no external sensor reading is received within this time, the external thermostat is ignored (safety fallback).",
+                "de": "Wenn innerhalb dieser Zeit kein neuer externer Sensorwert eintrifft, wird der externe Thermostat ignoriert (Sicherheits-Fallback).",
+                "nl": "Als binnen deze tijd geen nieuwe externe sensorwaarde binnenkomt, wordt de externe thermostaat genegeerd."
+              },
+              "value": 30,
+              "min": 1,
+              "max": 1440,
+              "units": {
+                "en": "minutes",
+                "de": "Minuten",
+                "nl": "minuten"
+              }
+            },
+            {
+              "id": "ext_thermostat_offset",
+              "type": "number",
+              "label": {
+                "en": "Sensor offset",
+                "de": "Sensor-Offset",
+                "nl": "Sensor-offset"
+              },
+              "hint": {
+                "en": "Fixed correction added to the external sensor value. Useful if the sensor consistently reads too high or too low (e.g. due to placement). Range -5 to +5 K.",
+                "de": "Fester Korrekturwert, der auf den externen Sensorwert addiert wird. Nuetzlich wenn der Sensor durch seinen Standort systematisch zu warm oder zu kalt misst. Bereich -5 bis +5 K.",
+                "nl": "Vaste correctie op de externe sensorwaarde. Handig als de sensor door zijn positie te warm of te koud meet. Bereik -5 tot +5 K."
+              },
+              "value": 0,
+              "min": -5,
+              "max": 5,
+              "units": {
+                "en": "K",
+                "de": "K",
+                "nl": "K"
+              }
+            },
+            {
+              "id": "ext_thermostat_dwell",
+              "type": "number",
+              "label": {
+                "en": "Minimum dwell time",
+                "de": "Mindest-Verweildauer",
+                "nl": "Minimale wachttijd"
+              },
+              "hint": {
+                "en": "The external temperature must stay outside the hysteresis for this long before the AC setpoint is adjusted. Prevents rapid up/down corrections caused by SwitchBot's 0.5 K reporting steps. 0 = react immediately.",
+                "de": "Die externe Temperatur muss so lange konsistent ausserhalb der Hysterese liegen, bevor der AC-Sollwert angepasst wird. Verhindert schnelle Auf/Ab-Korrekturen durch die 0,5-K-Meldeschritte des SwitchBot. 0 = sofort reagieren.",
+                "nl": "De externe temperatuur moet zolang buiten de hysterese blijven voordat de AC-instelling wordt aangepast. Voorkomt snelle op/neer-correcties door de 0,5 K-meldstapjes van SwitchBot. 0 = direct reageren."
+              },
+              "value": 60,
+              "min": 0,
+              "max": 600,
+              "units": {
+                "en": "seconds",
+                "de": "Sekunden",
+                "nl": "seconden"
+              }
+            }
+          ]
         }
       ]
     }
   ],
   "capabilities": {
+    "airco_louver": {
+      "type": "enum",
+      "title": {
+        "en": "Louver position",
+        "de": "Lamellen-Position",
+        "nl": "Lamellenpositie"
+      },
+      "desc": {
+        "en": "Tilt angle of the air outlet louvers (1 = nearly horizontal, 5 = fully extended downward)",
+        "de": "Neigungswinkel der Lamellen am Luftauslass (1 = fast waagerecht, 5 = ganz ausgefahren)",
+        "nl": "Hellingshoek van de uitblaaslamellen"
+      },
+      "values": [
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto / Off",
+            "de": "Auto / Aus",
+            "nl": "Auto / Uit"
+          }
+        },
+        {
+          "id": "p1",
+          "title": {
+            "en": "Position 1",
+            "de": "Position 1",
+            "nl": "Positie 1"
+          }
+        },
+        {
+          "id": "p2",
+          "title": {
+            "en": "Position 2",
+            "de": "Position 2",
+            "nl": "Positie 2"
+          }
+        },
+        {
+          "id": "p3",
+          "title": {
+            "en": "Position 3",
+            "de": "Position 3",
+            "nl": "Positie 3"
+          }
+        },
+        {
+          "id": "p4",
+          "title": {
+            "en": "Position 4",
+            "de": "Position 4",
+            "nl": "Positie 4"
+          }
+        },
+        {
+          "id": "p5",
+          "title": {
+            "en": "Position 5",
+            "de": "Position 5",
+            "nl": "Positie 5"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/louver.svg"
+    },
+    "airco_swing": {
+      "type": "boolean",
+      "title": {
+        "en": "Swing oscillation",
+        "de": "Lamellen-Schwenken",
+        "nl": "Schommelen"
+      },
+      "desc": {
+        "en": "Move the louvers back and forth to distribute air",
+        "de": "Bewegt die Lamellen hin und her zur Luftverteilung",
+        "nl": "Beweegt de lamellen heen en weer"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/swing.svg",
+      "insightsTitleTrue": {
+        "en": "Swing enabled",
+        "de": "Schwenken aktiviert"
+      },
+      "insightsTitleFalse": {
+        "en": "Swing disabled",
+        "de": "Schwenken deaktiviert"
+      }
+    },
+    "follow_me": {
+      "type": "boolean",
+      "title": {
+        "en": "Follow Me",
+        "de": "Follow Me (Fernbedienung)",
+        "nl": "Follow Me"
+      },
+      "desc": {
+        "en": "Use the temperature sensor of the IR remote control as reference instead of the indoor unit",
+        "de": "Nutzt den Temperaturfuehler der IR-Fernbedienung als Referenz statt der Innengeraet-Messung",
+        "nl": "Gebruikt de temperatuursensor van de IR-afstandsbediening als referentie in plaats van de binnenunit"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/follow_me.svg",
+      "insightsTitleTrue": {
+        "en": "Follow Me enabled",
+        "de": "Follow Me aktiviert"
+      },
+      "insightsTitleFalse": {
+        "en": "Follow Me disabled",
+        "de": "Follow Me deaktiviert"
+      }
+    },
+    "ieco": {
+      "type": "boolean",
+      "title": {
+        "en": "iECO Mode",
+        "de": "iECO-Modus",
+        "nl": "iECO modus"
+      },
+      "desc": {
+        "en": "Intelligent Eco mode (low-power inverter operation)",
+        "de": "Intelligenter Eco-Modus (Inverter im Sparbetrieb)",
+        "nl": "Intelligente Eco-modus"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/ieco.svg",
+      "insightsTitleTrue": {
+        "en": "iECO turned on",
+        "de": "iECO eingeschaltet"
+      },
+      "insightsTitleFalse": {
+        "en": "iECO turned off",
+        "de": "iECO ausgeschaltet"
+      }
+    },
+    "ion_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Ion Mode",
+        "de": "Ionen-Modus",
+        "nl": "Ionen-modus"
+      },
+      "desc": {
+        "en": "Negative-ion air purification / sterilization",
+        "de": "Negativ-Ionen Luftreinigung / Sterilisation",
+        "nl": "Negatieve-ionen luchtreiniging / sterilisatie"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/ion.svg",
+      "insightsTitleTrue": {
+        "en": "Ion mode turned on",
+        "de": "Ionen-Modus eingeschaltet"
+      },
+      "insightsTitleFalse": {
+        "en": "Ion mode turned off",
+        "de": "Ionen-Modus ausgeschaltet"
+      }
+    },
+    "jet_cool": {
+      "type": "boolean",
+      "title": {
+        "en": "Jet Cool",
+        "de": "Jet Cool (Schnellkühlung)",
+        "nl": "Jet Cool"
+      },
+      "desc": {
+        "en": "Flash-cool boost mode for maximum cooling power",
+        "de": "Schnellkühl-Boost für maximale Kühlleistung",
+        "nl": "Maximale snelle koeling"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/jet_cool.svg",
+      "insightsTitleTrue": {
+        "en": "Jet Cool turned on",
+        "de": "Jet Cool eingeschaltet"
+      },
+      "insightsTitleFalse": {
+        "en": "Jet Cool turned off",
+        "de": "Jet Cool ausgeschaltet"
+      }
+    },
+    "out_silent": {
+      "type": "boolean",
+      "title": {
+        "en": "Outdoor Silent",
+        "de": "Außengerät leise",
+        "nl": "Buitenunit stil"
+      },
+      "desc": {
+        "en": "Silent mode for outdoor unit (PortaSplit)",
+        "de": "Leise-Modus für das Außengerät (PortaSplit)",
+        "nl": "Stille modus voor buitenunit"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/out_silent.svg",
+      "insightsTitleTrue": {
+        "en": "Outdoor Silent turned on",
+        "de": "Außengerät-Leisemodus eingeschaltet"
+      },
+      "insightsTitleFalse": {
+        "en": "Outdoor Silent turned off",
+        "de": "Außengerät-Leisemodus ausgeschaltet"
+      }
+    },
     "thermostat_boost": {
       "type": "boolean",
       "title": {

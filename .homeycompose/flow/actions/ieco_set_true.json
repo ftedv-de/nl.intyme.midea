@@ -1,0 +1,13 @@
+{
+	"id": "ieco_set_true",
+	"title": {
+		"en": "Enable iECO",
+		"de": "iECO einschalten",
+		"nl": "iECO inschakelen"
+	},
+	"args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=airco&capabilities=ieco"
+    }]
+}

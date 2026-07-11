@@ -1,0 +1,85 @@
+diff --git a/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.d.ts b/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.d.ts
+index 0000000..1111111 100644
+--- a/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.d.ts
++++ b/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.d.ts
+@@ -42,6 +42,8 @@ export declare class DeviceState {
+     private _indoorTemperature;
+     private _outdoorTemperature;
+     private _statusCode;
++    private _iEcoMode;
++    private _anionMode;
+     get powerOn(): boolean;
+     set powerOn(value: boolean);
+     get operationalMode(): OPERATIONAL_MODE;
+@@ -68,6 +70,10 @@ export declare class DeviceState {
+     set outdoorTemperature(outindoorTemperature: number);
+     get statusCode(): number;
+     set statusCode(statusCode: number);
++    get iEcoMode(): boolean;
++    set iEcoMode(value: boolean);
++    get anionMode(): boolean;
++    set anionMode(value: boolean);
+ }
+diff --git a/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.js b/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.js
+index 0000000..2222222 100644
+--- a/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.js
++++ b/node_modules/midea-msmarthome-ac-euosk105/dist/DeviceState.js
+@@ -19,6 +19,8 @@ class DeviceState {
+         this._indoorTemperature = 0;
+         this._outdoorTemperature = 0;
+         this._statusCode = 0;
++        this._iEcoMode = false;
++        this._anionMode = false;
+     }
+     get powerOn() { return this._powerOn; }
+     set powerOn(value) { this._powerOn = value; }
+@@ -54,6 +56,10 @@ class DeviceState {
+     set outdoorTemperature(outindoorTemperature) { this._outdoorTemperature = outindoorTemperature; }
+     get statusCode() { return this._statusCode; }
+     set statusCode(statusCode) { this._statusCode = statusCode; }
++    get iEcoMode() { return this._iEcoMode; }
++    set iEcoMode(value) { this._iEcoMode = !!value; }
++    get anionMode() { return this._anionMode; }
++    set anionMode(value) { this._anionMode = !!value; }
+ }
+ exports.DeviceState = DeviceState;
+diff --git a/node_modules/midea-msmarthome-ac-euosk105/dist/command/SetStateCommand.js b/node_modules/midea-msmarthome-ac-euosk105/dist/command/SetStateCommand.js
+index 0000000..3333333 100644
+--- a/node_modules/midea-msmarthome-ac-euosk105/dist/command/SetStateCommand.js
++++ b/node_modules/midea-msmarthome-ac-euosk105/dist/command/SetStateCommand.js
+@@ -22,7 +22,11 @@ class SetStateCommand extends LANCommand_1.LANCommand {
+         const operationalMode = (deviceState.operationalMode & 0x7) << 5;
+         const swingMode = 0x30 | (deviceState.swingMode & 0x3F);
+-        const ecoMode = deviceState.ecoMode ? 0x80 : 0;
++        // Byte 9: smart_eye(0x01) | dry(0x04) | aux_heat(0x08) | iECO(0x10) | anion(0x20) | classicECO(0x80)
++        const classicEco = deviceState.ecoMode ? 0x80 : 0;
++        const iEco       = deviceState.iEcoMode ? 0x10 : 0;
++        const anion      = deviceState.anionMode ? 0x20 : 0;
++        const byte9      = classicEco | iEco | anion;
+         const sleepMode = deviceState.sleepMode ? 0x01 : 0;
+         const turboMode = deviceState.turboMode ? 0x02 : 0;
+         const display = false ? 0x10 : 0;
+@@ -38,7 +42,7 @@ class SetStateCommand extends LANCommand_1.LANCommand {
+             0x7F, 0x7F, 0x00,
+             swingMode,
+             turboAlt,
+-            ecoMode,
++            byte9,
+             sleepMode | turboMode | display | fahrenheit,
+             0x00, 0x00, 0x00, 0x00,
+             0x00, 0x00, 0x00, 0x00,
+diff --git a/node_modules/midea-msmarthome-ac-euosk105/dist/command/GetStateResponse.js b/node_modules/midea-msmarthome-ac-euosk105/dist/command/GetStateResponse.js
+index 0000000..4444444 100644
+--- a/node_modules/midea-msmarthome-ac-euosk105/dist/command/GetStateResponse.js
++++ b/node_modules/midea-msmarthome-ac-euosk105/dist/command/GetStateResponse.js
+@@ -12,7 +12,10 @@ class GetStateResponse extends DeviceState_1.DeviceState {
+         this.swingMode = data[7] & 0xF;
+         this.turboMode = (((data[10] & 0x02) === 0x02) || ((data[8] & 0x20) === 0x20));
+-        this.ecoMode = (data[9] & 0x10) === 0x10;
++        // classicECO=0x80, iECO=0x10, anion=0x20 alle auf Byte 9
++        this.ecoMode   = (data[9] & 0x80) === 0x80;
++        this.iEcoMode  = (data[9] & 0x10) === 0x10;
++        this.anionMode = (data[9] & 0x20) === 0x20;
+         this.freezeProtectionMode = (data[21] & 0x80) === 0x80;
+         this.sleepMode = !!(data[10] & 0x1);
+         this.fahrenheit = ((data[10] & 0x04) >> 2) === 0x01;

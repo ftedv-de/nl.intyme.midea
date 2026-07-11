@@ -1,0 +1,25 @@
+{
+	"type": "boolean",
+	"title": {
+		"en": "Swing oscillation",
+		"de": "Lamellen-Schwenken",
+		"nl": "Schommelen"
+	},
+	"desc": {
+		"en": "Move the louvers back and forth to distribute air",
+		"de": "Bewegt die Lamellen hin und her zur Luftverteilung",
+		"nl": "Beweegt de lamellen heen en weer"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "toggle",
+	"icon": "/assets/swing.svg",
+	"insightsTitleTrue": {
+		"en": "Swing enabled",
+		"de": "Schwenken aktiviert"
+	},
+	"insightsTitleFalse": {
+		"en": "Swing disabled",
+		"de": "Schwenken deaktiviert"
+	}
+}

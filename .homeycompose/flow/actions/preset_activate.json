@@ -1,0 +1,37 @@
+{
+  "title": {
+    "en": "Activate preset",
+    "de": "Preset aktivieren",
+    "nl": "Preset activeren"
+  },
+  "titleFormatted": {
+    "en": "Activate preset [[preset]]",
+    "de": "Preset [[preset]] aktivieren",
+    "nl": "Preset [[preset]] activeren"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=airco"
+    },
+    {
+      "type": "dropdown",
+      "name": "preset",
+      "title": {
+        "en": "Preset",
+        "de": "Preset",
+        "nl": "Preset"
+      },
+      "values": [
+        { "id": "cooling_home",    "label": { "en": "Cooling – Home",    "de": "Kühlen – Zuhause",    "nl": "Koelen – Thuis" } },
+        { "id": "cooling_away",    "label": { "en": "Cooling – Away",    "de": "Kühlen – Abwesend",   "nl": "Koelen – Afwezig" } },
+        { "id": "cooling_night",   "label": { "en": "Cooling – Night",   "de": "Kühlen – Nacht",      "nl": "Koelen – Nacht" } },
+        { "id": "heating_home",    "label": { "en": "Heating – Home",    "de": "Heizen – Zuhause",    "nl": "Verwarmen – Thuis" } },
+        { "id": "heating_away",    "label": { "en": "Heating – Away",    "de": "Heizen – Abwesend",   "nl": "Verwarmen – Afwezig" } },
+        { "id": "fan_only",        "label": { "en": "Fan only",          "de": "Nur Lüfter",          "nl": "Alleen ventilator" } },
+        { "id": "off",             "label": { "en": "Off",               "de": "Aus",                 "nl": "Uit" } }
+      ]
+    }
+  ]
+}

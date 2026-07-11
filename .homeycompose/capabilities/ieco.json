@@ -1,0 +1,25 @@
+{
+	"type": "boolean",
+	"title": {
+		"en": "iECO Mode",
+		"de": "iECO-Modus",
+		"nl": "iECO modus"
+	},
+	"desc": {
+		"en": "Intelligent Eco mode (low-power inverter operation)",
+		"de": "Intelligenter Eco-Modus (Inverter im Sparbetrieb)",
+		"nl": "Intelligente Eco-modus"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "button",
+	"icon": "/assets/ieco.svg",
+	"insightsTitleTrue": {
+		"en": "iECO turned on",
+		"de": "iECO eingeschaltet"
+	},
+	"insightsTitleFalse": {
+		"en": "iECO turned off",
+		"de": "iECO ausgeschaltet"
+	}
+}

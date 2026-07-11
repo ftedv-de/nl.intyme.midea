@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <g fill="none" stroke="#1E88E5" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 32v192"/>
+    <path d="M48 80l160 96"/>
+    <path d="M48 176l160-96"/>
+    <path d="M128 32l-24 24"/>
+    <path d="M128 32l24 24"/>
+    <path d="M128 224l-24-24"/>
+    <path d="M128 224l24-24"/>
+    <path d="M48 80l8 32"/>
+    <path d="M48 80l32-8"/>
+    <path d="M208 176l-8-32"/>
+    <path d="M208 176l-32 8"/>
+    <path d="M48 176l32 8"/>
+    <path d="M48 176l8-32"/>
+    <path d="M208 80l-32-8"/>
+    <path d="M208 80l-8 32"/>
+  </g>
+</svg>

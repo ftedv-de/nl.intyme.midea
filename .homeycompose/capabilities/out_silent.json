@@ -1,0 +1,25 @@
+{
+	"type": "boolean",
+	"title": {
+		"en": "Outdoor Silent",
+		"de": "Außengerät leise",
+		"nl": "Buitenunit stil"
+	},
+	"desc": {
+		"en": "Silent mode for outdoor unit (PortaSplit)",
+		"de": "Leise-Modus für das Außengerät (PortaSplit)",
+		"nl": "Stille modus voor buitenunit"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "button",
+	"icon": "/assets/out_silent.svg",
+	"insightsTitleTrue": {
+		"en": "Outdoor Silent turned on",
+		"de": "Außengerät-Leisemodus eingeschaltet"
+	},
+	"insightsTitleFalse": {
+		"en": "Outdoor Silent turned off",
+		"de": "Außengerät-Leisemodus ausgeschaltet"
+	}
+}

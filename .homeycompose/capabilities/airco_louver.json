@@ -1,0 +1,25 @@
+{
+	"type": "enum",
+	"title": {
+		"en": "Louver position",
+		"de": "Lamellen-Position",
+		"nl": "Lamellenpositie"
+	},
+	"desc": {
+		"en": "Tilt angle of the air outlet louvers (1 = nearly horizontal, 5 = fully extended downward)",
+		"de": "Neigungswinkel der Lamellen am Luftauslass (1 = fast waagerecht, 5 = ganz ausgefahren)",
+		"nl": "Hellingshoek van de uitblaaslamellen"
+	},
+	"values": [
+		{ "id": "auto", "title": { "en": "Auto / Off", "de": "Auto / Aus", "nl": "Auto / Uit" } },
+		{ "id": "p1",   "title": { "en": "Position 1", "de": "Position 1", "nl": "Positie 1" } },
+		{ "id": "p2",   "title": { "en": "Position 2", "de": "Position 2", "nl": "Positie 2" } },
+		{ "id": "p3",   "title": { "en": "Position 3", "de": "Position 3", "nl": "Positie 3" } },
+		{ "id": "p4",   "title": { "en": "Position 4", "de": "Position 4", "nl": "Positie 4" } },
+		{ "id": "p5",   "title": { "en": "Position 5", "de": "Position 5", "nl": "Positie 5" } }
+	],
+	"getable": true,
+	"setable": true,
+	"uiComponent": "picker",
+	"icon": "/assets/louver.svg"
+}

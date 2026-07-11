@@ -8,13 +8,19 @@
     "onoff",
     "thermostat_mode",
     "target_temperature",
+    "thermostat_fan_speed",
+    "airco_swing",
+    "airco_louver",
     "measure_temperature",
     "measure_temperature.outside",
     "thermostat_boost",
-    "thermostat_fan_speed",
-    "thermostat_swing_mode",
     "thermostat_eco",
-    "thermostat_freeze_protection"
+    "thermostat_freeze_protection",
+    "ieco",
+    "ion_mode",
+    "jet_cool",
+    "out_silent",
+    "follow_me"
   ],
   "capabilitiesOptions": {
     "target_temperature": {
@@ -25,13 +31,36 @@
     "measure_temperature": {
       "title": {
         "en": "Inside temperature",
+        "de": "Innentemperatur",
         "nl": "Binnentemperatuur"
       }
     },
     "measure_temperature.outside": {
       "title": {
         "en": "Outside temperature",
+        "de": "Außentemperatur",
         "nl": "Buitentemperatuur"
+      }
+    },
+    "measure_power": {
+      "title": {
+        "en": "Power consumption",
+        "de": "Stromverbrauch",
+        "nl": "Stroomverbruik"
+      }
+    },
+    "meter_power": {
+      "title": {
+        "en": "Energy total",
+        "de": "Energie gesamt",
+        "nl": "Energie totaal"
+      }
+    },
+    "measure_humidity": {
+      "title": {
+        "en": "Humidity",
+        "de": "Luftfeuchte",
+        "nl": "Vochtigheid"
       }
     }
   },

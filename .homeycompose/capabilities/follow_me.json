@@ -1,0 +1,25 @@
+{
+	"type": "boolean",
+	"title": {
+		"en": "Follow Me",
+		"de": "Follow Me (Fernbedienung)",
+		"nl": "Follow Me"
+	},
+	"desc": {
+		"en": "Use the temperature sensor of the IR remote control as reference instead of the indoor unit",
+		"de": "Nutzt den Temperaturfuehler der IR-Fernbedienung als Referenz statt der Innengeraet-Messung",
+		"nl": "Gebruikt de temperatuursensor van de IR-afstandsbediening als referentie in plaats van de binnenunit"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "button",
+	"icon": "/assets/follow_me.svg",
+	"insightsTitleTrue": {
+		"en": "Follow Me enabled",
+		"de": "Follow Me aktiviert"
+	},
+	"insightsTitleFalse": {
+		"en": "Follow Me disabled",
+		"de": "Follow Me deaktiviert"
+	}
+}

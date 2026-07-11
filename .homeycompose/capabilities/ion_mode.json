@@ -1,0 +1,25 @@
+{
+	"type": "boolean",
+	"title": {
+		"en": "Ion Mode",
+		"de": "Ionen-Modus",
+		"nl": "Ionen-modus"
+	},
+	"desc": {
+		"en": "Negative-ion air purification / sterilization",
+		"de": "Negativ-Ionen Luftreinigung / Sterilisation",
+		"nl": "Negatieve-ionen luchtreiniging / sterilisatie"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "button",
+	"icon": "/assets/ion.svg",
+	"insightsTitleTrue": {
+		"en": "Ion mode turned on",
+		"de": "Ionen-Modus eingeschaltet"
+	},
+	"insightsTitleFalse": {
+		"en": "Ion mode turned off",
+		"de": "Ionen-Modus ausgeschaltet"
+	}
+}
