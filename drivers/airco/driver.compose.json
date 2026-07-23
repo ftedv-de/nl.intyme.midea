@@ -20,7 +20,8 @@
     "ion_mode",
     "jet_cool",
     "out_silent",
-    "follow_me"
+    "follow_me",
+    "self_clean"
   ],
   "capabilitiesOptions": {
     "target_temperature": {
