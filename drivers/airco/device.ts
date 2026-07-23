@@ -191,7 +191,11 @@ export class MideaDevice extends Homey.Device {
     try {
       // ----- POWER / ENERGY -----
       try {
-        const energy: any = await new GetPowerUsageCommand(this._device).execute();
+        const configuredDecodeMode = this.getSetting("energy_decode_mode");
+        const energyDecodeMode = (configuredDecodeMode === "bcd" || configuredDecodeMode === "binary")
+          ? configuredDecodeMode
+          : "auto";
+        const energy: any = await new GetPowerUsageCommand(this._device, energyDecodeMode).execute();
         if (energy) {
           // realTimePower: 0..20000 W
           if (Number.isFinite(energy.realTimePower) && energy.realTimePower >= 0 && energy.realTimePower <= 20000) {

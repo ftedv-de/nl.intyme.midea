@@ -467,6 +467,7 @@
     "conditions": [
       {
         "id": "follow_me_is_true",
+        "$filter": "capabilities=follow_me",
         "title": {
           "en": "Follow Me is !{{enabled|disabled}}",
           "de": "Follow Me ist !{{eingeschaltet|ausgeschaltet}}",
@@ -482,6 +483,7 @@
       },
       {
         "id": "ieco_is_true",
+        "$filter": "capabilities=ieco",
         "title": {
           "en": "iECO is !{{enabled|disabled}}",
           "de": "iECO ist !{{eingeschaltet|ausgeschaltet}}",
@@ -497,6 +499,7 @@
       },
       {
         "id": "ion_is_true",
+        "$filter": "capabilities=ion_mode",
         "title": {
           "en": "Ion mode is !{{enabled|disabled}}",
           "de": "Ionen-Modus ist !{{eingeschaltet|ausgeschaltet}}",
@@ -512,6 +515,7 @@
       },
       {
         "id": "jet_cool_is_true",
+        "$filter": "capabilities=jet_cool",
         "title": {
           "en": "Jet Cool is !{{enabled|disabled}}",
           "de": "Jet Cool ist !{{eingeschaltet|ausgeschaltet}}",
@@ -527,6 +531,7 @@
       },
       {
         "id": "out_silent_is_true",
+        "$filter": "capabilities=out_silent",
         "title": {
           "en": "Outdoor Silent is !{{enabled|disabled}}",
           "de": "Außengerät-Leise ist !{{eingeschaltet|ausgeschaltet}}",
@@ -556,6 +561,7 @@
       },
       {
         "id": "thermostat_eco_is_true",
+        "$filter": "capabilities=thermostat_eco",
         "title": {
           "en": "ECO mode is !{{enabled|disabled}}",
           "nl": "ECO modus is !{{ingeschakeld|uitgeschakeld}}"
@@ -1875,6 +1881,47 @@
                 "de": "Sekunden",
                 "nl": "seconden"
               }
+            },
+            {
+              "id": "energy_decode_mode",
+              "type": "dropdown",
+              "label": {
+                "en": "Energy data format",
+                "de": "Format der Energiedaten",
+                "nl": "Formaat energiegegevens"
+              },
+              "hint": {
+                "en": "Automatic detects BCD or binary encoding per response. Select a fixed format if automatic detection is not reliable for your model.",
+                "de": "Automatisch erkennt BCD- oder Binärkodierung pro Antwort. Ein festes Format wählen, falls die automatische Erkennung bei diesem Modell nicht zuverlässig ist.",
+                "nl": "Automatisch detecteert BCD- of binaire codering per antwoord. Kies een vast formaat als automatische detectie voor dit model niet betrouwbaar is."
+              },
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "en": "Automatic",
+                    "de": "Automatisch",
+                    "nl": "Automatisch"
+                  }
+                },
+                {
+                  "id": "bcd",
+                  "label": {
+                    "en": "BCD",
+                    "de": "BCD",
+                    "nl": "BCD"
+                  }
+                },
+                {
+                  "id": "binary",
+                  "label": {
+                    "en": "Binary",
+                    "de": "Binär",
+                    "nl": "Binair"
+                  }
+                }
+              ]
             }
           ]
         },

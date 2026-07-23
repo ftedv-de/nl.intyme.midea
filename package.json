@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "postinstall": "node scripts/patch-midea-lib.js && node scripts/build-app-json.js"
+    "postinstall": "node scripts/patch-midea-lib.js && node scripts/patch-energy-decoder.js && node scripts/build-app-json.js"
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.1",
