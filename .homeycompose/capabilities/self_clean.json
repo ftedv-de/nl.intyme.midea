@@ -1,0 +1,26 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Self Clean",
+    "de": "Selbstreinigung",
+    "nl": "Zelfreiniging"
+  },
+  "desc": {
+    "en": "Start and monitor the air conditioner's self-cleaning cycle",
+    "de": "Selbstreinigungszyklus der Klimaanlage starten und überwachen",
+    "nl": "Zelfreinigingscyclus van de airconditioning starten en bewaken"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button",
+  "insightsTitleTrue": {
+    "en": "Self cleaning started",
+    "de": "Selbstreinigung gestartet",
+    "nl": "Zelfreiniging gestart"
+  },
+  "insightsTitleFalse": {
+    "en": "Self cleaning finished",
+    "de": "Selbstreinigung beendet",
+    "nl": "Zelfreiniging voltooid"
+  }
+}
