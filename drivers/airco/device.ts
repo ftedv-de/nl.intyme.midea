@@ -1,5 +1,15 @@
 import Homey from 'homey';
-import { Driver as MDriver, Device as MDevice, DeviceContext as MDeviceContext, GetStateCommand, DeviceState, LANSecurityContext, CloudSecurityContext, SetStateCommand, _LOGGER } from 'midea-msmarthome-ac-euosk105';
+import {
+  Driver as MDriver,
+  Device as MDevice,
+  DeviceContext as MDeviceContext,
+  GetStateCommand,
+  DeviceState,
+  LANSecurityContext,
+  CloudSecurityContext,
+  SetStateCommand,
+  _LOGGER,
+} from 'midea-msmarthome-ac-euosk105';
 import { SetIEcoCommand } from 'midea-msmarthome-ac-euosk105/dist/command/SetIEcoCommand';
 import { GetIEcoCommand } from 'midea-msmarthome-ac-euosk105/dist/command/GetIEcoCommand';
 import { SetJetCoolCommand } from 'midea-msmarthome-ac-euosk105/dist/command/SetJetCoolCommand';
@@ -12,6 +22,9 @@ import { GetPowerUsageCommand } from 'midea-msmarthome-ac-euosk105/dist/command/
 import { GetGroup5Command } from 'midea-msmarthome-ac-euosk105/dist/command/GetGroup5Command';
 import { SetPropertiesCommand, PROPERTY_ID } from 'midea-msmarthome-ac-euosk105/dist/command/SetPropertiesCommand';
 import { FAN_SPEED, OPERATIONAL_MODE, SWING_MODE } from 'midea-msmarthome-ac-euosk105/dist/DeviceState';
+
+const LAN_OPERATION_TIMEOUT_MS = 15000;
+const LAN_OPERATION_ATTEMPTS = 2;
 
 const LOUVER_VALUES: { [key: string]: number } = {
   auto: 0,
@@ -33,10 +46,12 @@ function louverIdFromRaw(raw: number | undefined | null): string {
 
 export class MideaDevice extends Homey.Device {
   public _device: MDevice;
-  private _intervalId: any;
-  private _energyIntervalId: any = null;
-  private _updatingState = false;
-  private _energyPollingActive = false;
+
+  private _pollTimerId: NodeJS.Timeout | null = null;
+  private _energyPollTimerId: NodeJS.Timeout | null = null;
+  private _pollGeneration = 0;
+  private _energyPollGeneration = 0;
+  private _commandQueue: Promise<void> = Promise.resolve();
   private _maximumFailureCount = 5;
   private _failureCount = 0;
   private _capabilityProbed = { power: false, energy: false, humidity: false, defrost: false };
@@ -47,21 +62,22 @@ export class MideaDevice extends Homey.Device {
   };
   private _capabilityLockedUntil: { [cap: string]: number } = {};
   private _lastOperationalMode: number | null = null;
-  private _lastSwingResyncAt = 0;
   private _consecutiveEnergyFailures = 0;
+  private _registeredCapabilityListeners = new Set<string>();
 
   async onInit() {
     this.log(`Midea AC [${this.getName()}] initializing ...`);
     this._failureCount = 0;
+    this._commandQueue = Promise.resolve();
+    this._stopPolling();
+    this._stopEnergyPolling();
+    this._closeLanConnection();
+
+    const settings = this.getSettings();
+    this._maximumFailureCount = Number(settings.max_number_of_errors_before_device_unavailable) || 5;
 
     try {
-      const deviceContext: MDeviceContext = new MDeviceContext();
-      deviceContext.id = this.getData().id;
-      deviceContext.macAddress = this.getData().macAddress;
-      deviceContext.udpId = this.getData().udpId;
-      deviceContext.host = this.getStore().host;
-      deviceContext.port = this.getStore().port;
-      this._device = new MDevice(deviceContext);
+      this._device = new MDevice(this._createDeviceContext());
 
       if (!this.getStore().token || !this.getStore().key) {
         const cloudSecurityContext = new CloudSecurityContext(this.getStore().username, this.getStore().password);
@@ -69,8 +85,6 @@ export class MideaDevice extends Homey.Device {
         await this.setStoreValue('token', lanSecurityContext.token);
         await this.setStoreValue('key', lanSecurityContext.key);
       }
-
-      await this._device.authenticate(new LANSecurityContext(this.getStore().token, this.getStore().key));
 
       const capabilities = [
         'onoff',
@@ -92,7 +106,10 @@ export class MideaDevice extends Homey.Device {
 
       for (const capability of capabilities) {
         if (!this.hasCapability(capability)) await this.addCapability(capability);
-        this.registerCapabilityListener(capability, async (value, opts) => this.onCapability(capability, value, opts));
+        if (!this._registeredCapabilityListeners.has(capability)) {
+          this.registerCapabilityListener(capability, async (value, opts) => this.onCapability(capability, value, opts));
+          this._registeredCapabilityListeners.add(capability);
+        }
       }
 
       if (this.hasCapability('thermostat_swing_mode')) {
@@ -102,8 +119,6 @@ export class MideaDevice extends Homey.Device {
       await this._refreshState();
       await this.setAvailable();
 
-      const settings = this.getSettings();
-      this._maximumFailureCount = Number(settings.max_number_of_errors_before_device_unavailable) || 5;
       this._initializePolling(Number(settings.polling_interval) || 10);
       this._initializeEnergyPolling(Number(settings.poll_energy_interval) || 60);
 
@@ -112,25 +127,109 @@ export class MideaDevice extends Homey.Device {
       const message = error instanceof Error ? error.message : JSON.stringify(error);
       this.error(`Cannot initialize device[${this.getName()}]: ${message}`);
       await this.setUnavailable(`Cannot initialize device[${this.getName()}]: ${message}`);
+
+      if (this._getStoredLanSecurityContext()) {
+        this._initializePolling(Number(settings.polling_interval) || 10);
+        this._initializeEnergyPolling(Number(settings.poll_energy_interval) || 60);
+      }
     }
   }
 
+  private _createDeviceContext(): MDeviceContext {
+    const data = this.getData();
+    const store = this.getStore();
+    const deviceContext = new MDeviceContext();
+    deviceContext.id = data.id;
+    deviceContext.macAddress = data.macAddress;
+    deviceContext.udpId = data.udpId;
+    deviceContext.host = store.host || data.host;
+    deviceContext.port = store.port || data.port;
+
+    if (!deviceContext.host || !deviceContext.port) {
+      throw new Error('Missing LAN host or port; repair or re-add the device');
+    }
+
+    return deviceContext;
+  }
+
+  private _getStoredLanSecurityContext(): LANSecurityContext | null {
+    const store = this.getStore();
+    if (typeof store.token !== 'string' || typeof store.key !== 'string' || !store.token || !store.key) return null;
+    return new LANSecurityContext(store.token, store.key);
+  }
+
+  private _closeLanConnection(device = this._device) {
+    if (!device) return;
+    const socket = (device as unknown as { lanConnection?: { _socket?: { destroy?: () => void } } }).lanConnection?._socket;
+    socket?.destroy?.();
+    device.close();
+  }
+
+  private _resetLanDevice() {
+    this._closeLanConnection();
+    this._device = new MDevice(this._createDeviceContext());
+    const context = this._getStoredLanSecurityContext();
+    if (context) this._device.lanSecurityContext = context;
+  }
+
   private _initializePolling(intervalSeconds: number) {
-    if (this._intervalId) this.homey.clearInterval(this._intervalId);
-    this._intervalId = this.homey.setInterval(async () => {
+    this._stopPolling();
+    const generation = this._pollGeneration;
+    const intervalMs = Math.max(1, intervalSeconds) * 1000;
+
+    const poll = async () => {
+      this._pollTimerId = null;
       try {
         await this._refreshState();
       } catch (error) {
-        this.error(error);
+        this.error(`State poll failed: ${error instanceof Error ? error.message : String(error)}`);
       }
-    }, intervalSeconds * 1000);
+
+      if (generation === this._pollGeneration) {
+        this._pollTimerId = this.homey.setTimeout(poll, intervalMs);
+      }
+    };
+
+    this._pollTimerId = this.homey.setTimeout(poll, intervalMs);
+  }
+
+  private _stopPolling() {
+    this._pollGeneration++;
+    if (this._pollTimerId) {
+      this.homey.clearTimeout(this._pollTimerId);
+      this._pollTimerId = null;
+    }
   }
 
   private _initializeEnergyPolling(intervalSeconds: number) {
-    if (this._energyIntervalId) this.homey.clearInterval(this._energyIntervalId);
+    this._stopEnergyPolling();
     if (intervalSeconds <= 0) return;
-    this.homey.setTimeout(() => this._pollEnergyAndGroup5().catch(error => this.log(`Initial energy poll failed: ${error}`)), 3000);
-    this._energyIntervalId = this.homey.setInterval(() => this._pollEnergyAndGroup5().catch(error => this.log(`Energy poll failed: ${error}`)), intervalSeconds * 1000);
+
+    const generation = this._energyPollGeneration;
+    const intervalMs = intervalSeconds * 1000;
+
+    const poll = async () => {
+      this._energyPollTimerId = null;
+      try {
+        await this._pollEnergyAndGroup5();
+      } catch (error) {
+        this.log(`Energy poll failed: ${error instanceof Error ? error.message : String(error)}`);
+      }
+
+      if (generation === this._energyPollGeneration) {
+        this._energyPollTimerId = this.homey.setTimeout(poll, intervalMs);
+      }
+    };
+
+    this._energyPollTimerId = this.homey.setTimeout(poll, 3000);
+  }
+
+  private _stopEnergyPolling() {
+    this._energyPollGeneration++;
+    if (this._energyPollTimerId) {
+      this.homey.clearTimeout(this._energyPollTimerId);
+      this._energyPollTimerId = null;
+    }
   }
 
   private _isPlausibleEnergyValue(value: number): boolean {
@@ -149,17 +248,19 @@ export class MideaDevice extends Homey.Device {
   }
 
   private async _pollEnergyAndGroup5(): Promise<void> {
-    if (this._energyPollingActive) return;
-    this._energyPollingActive = true;
-    let anySuccess = false;
+    return this._runExclusive(async () => {
+      let anySuccess = false;
 
-    try {
       try {
-        const configuredDecodeMode = this.getSetting("energy_decode_mode");
-        const energyDecodeMode = (configuredDecodeMode === "bcd" || configuredDecodeMode === "binary")
+        const configuredDecodeMode = this.getSetting('energy_decode_mode');
+        const energyDecodeMode = configuredDecodeMode === 'bcd' || configuredDecodeMode === 'binary'
           ? configuredDecodeMode
-          : "auto";
-        const energy: any = await new GetPowerUsageCommand(this._device, energyDecodeMode).execute();
+          : 'auto';
+        const energy: any = await this._withLanTimeout(
+          'get power usage',
+          device => new GetPowerUsageCommand(device, energyDecodeMode).execute(),
+        );
+
         if (energy) {
           if (Number.isFinite(energy.realTimePower) && energy.realTimePower >= 0 && energy.realTimePower <= 20000) {
             this._lastValid.realTimePower = energy.realTimePower;
@@ -184,7 +285,11 @@ export class MideaDevice extends Homey.Device {
       }
 
       try {
-        const group5: any = await new GetGroup5Command(this._device).execute();
+        const group5: any = await this._withLanTimeout(
+          'get group5',
+          device => new GetGroup5Command(device).execute(),
+        );
+
         if (group5) {
           if (Number.isFinite(group5.humidity) && group5.humidity >= 1 && group5.humidity <= 100) {
             this._lastValid.humidity = group5.humidity;
@@ -208,31 +313,36 @@ export class MideaDevice extends Homey.Device {
       }
 
       this._consecutiveEnergyFailures = anySuccess ? 0 : this._consecutiveEnergyFailures + 1;
-    } finally {
-      this._energyPollingActive = false;
-    }
+    });
   }
 
   private async _refreshState() {
-    if (this._updatingState) return;
+    return this._runExclusive(() => this._refreshStateUnsafe());
+  }
 
+  private async _refreshStateUnsafe() {
     try {
-      const state = await new GetStateCommand(this._device).execute();
+      const state = await this._withLanTimeout('get state', device => new GetStateCommand(device).execute());
       let iEcoState: boolean | null = null;
       let jetCoolState: boolean | null = null;
       let outSilentState: boolean | null = null;
       let selfCleanState: boolean | null = null;
 
-      try { iEcoState = await new GetIEcoCommand(this._device).execute(); } catch (error) { this.log(error); }
-      try { jetCoolState = await new GetJetCoolCommand(this._device).execute(); } catch (error) { this.log(error); }
-      try { outSilentState = await new GetOutSilentCommand(this._device).execute(); } catch (error) { this.log(error); }
-      try { selfCleanState = await new GetSelfCleanCommand(this._device).execute(); } catch (error) { this.log(error); }
+      try { iEcoState = await this._withLanTimeout('get iECO', device => new GetIEcoCommand(device).execute()); } catch (error) { this.log(error); }
+      try { jetCoolState = await this._withLanTimeout('get jet cool', device => new GetJetCoolCommand(device).execute()); } catch (error) { this.log(error); }
+      try { outSilentState = await this._withLanTimeout('get outdoor silent', device => new GetOutSilentCommand(device).execute()); } catch (error) { this.log(error); }
+      try { selfCleanState = await this._withLanTimeout('get self clean', device => new GetSelfCleanCommand(device).execute()); } catch (error) { this.log(error); }
 
       this._updateState(state, iEcoState, jetCoolState, outSilentState, selfCleanState);
       this._failureCount = 0;
+      if (!this.getAvailable()) await this.setAvailable();
+      return state;
     } catch (error) {
       this._failureCount++;
-      if (this._failureCount >= this._maximumFailureCount) throw error;
+      if (this._failureCount >= this._maximumFailureCount) {
+        await this.setUnavailable(`Device [${this.getName()}] is unavailable; failure count: ${this._failureCount}`);
+      }
+      throw error;
     }
   }
 
@@ -254,6 +364,7 @@ export class MideaDevice extends Homey.Device {
         case OPERATIONAL_MODE.HEAT: set('thermostat_mode', 'heat'); break;
         case OPERATIONAL_MODE.DRY: set('thermostat_mode', 'dry'); break;
         case OPERATIONAL_MODE.FAN: set('thermostat_mode', 'fan'); break;
+        default: break;
       }
     } else {
       set('thermostat_mode', 'off');
@@ -272,11 +383,12 @@ export class MideaDevice extends Homey.Device {
       case FAN_SPEED.MEDIUM: set('thermostat_fan_speed', 'medium'); break;
       case FAN_SPEED.HIGH: set('thermostat_fan_speed', 'high'); break;
       case FAN_SPEED.FULL: set('thermostat_fan_speed', 'full'); break;
+      default: break;
     }
 
     const louverPosition = louverIdFromRaw((state as any).verticalSwingAngle);
     const swingActive = state.swingMode !== SWING_MODE.OFF;
-    set('airco_swing', swingActive || louverPosition !== 'auto');
+    set('airco_swing', swingActive);
     set('airco_louver', louverPosition);
     set('thermostat_eco', state.ecoMode);
     set('thermostat_freeze_protection', state.freezeProtectionMode);
@@ -305,73 +417,140 @@ export class MideaDevice extends Homey.Device {
   }
 
   async onCapability(capability: string, value: any, opts: any) {
-    this.log(`Device::onCapability(${capability}, ${JSON.stringify(value)})`);
-    this._updatingState = true;
+    return this._runExclusive(async () => {
+      this.log(`Device::onCapability(${capability}, ${JSON.stringify(value)})`);
 
-    try {
-      this._setCapIfChanged(capability, value, true);
-      this._lockCapability(capability);
-      let state = await new GetStateCommand(this._device).execute();
+      try {
+        this._setCapIfChanged(capability, value, true);
+        this._lockCapability(capability);
 
-      switch (capability) {
-        case 'onoff': state.powerOn = value; break;
-        case 'target_temperature': state.targetTemperature = value; break;
-        case 'thermostat_mode':
-          if (value === 'off') state.powerOn = false;
-          else {
-            state.powerOn = true;
-            if (value === 'auto') state.operationalMode = OPERATIONAL_MODE.AUTO;
-            if (value === 'cool') state.operationalMode = OPERATIONAL_MODE.COOL;
-            if (value === 'heat') state.operationalMode = OPERATIONAL_MODE.HEAT;
-            if (value === 'dry') state.operationalMode = OPERATIONAL_MODE.DRY;
-            if (value === 'fan') state.operationalMode = OPERATIONAL_MODE.FAN;
+        let state = await this._withLanTimeout(
+          'get state before capability update',
+          device => new GetStateCommand(device).execute(),
+        );
+
+        switch (capability) {
+          case 'onoff':
+            state.powerOn = Boolean(value);
+            if (state.powerOn && this._lastOperationalMode !== null) state.operationalMode = this._lastOperationalMode;
+            break;
+          case 'target_temperature': state.targetTemperature = Number(value); break;
+          case 'thermostat_mode':
+            if (value === 'off') state.powerOn = false;
+            else {
+              state.powerOn = true;
+              if (value === 'auto') state.operationalMode = OPERATIONAL_MODE.AUTO;
+              if (value === 'cool') state.operationalMode = OPERATIONAL_MODE.COOL;
+              if (value === 'heat') state.operationalMode = OPERATIONAL_MODE.HEAT;
+              if (value === 'dry') state.operationalMode = OPERATIONAL_MODE.DRY;
+              if (value === 'fan') state.operationalMode = OPERATIONAL_MODE.FAN;
+            }
+            break;
+          case 'thermostat_boost': state.turboMode = Boolean(value); break;
+          case 'thermostat_eco': state.ecoMode = Boolean(value); break;
+          case 'thermostat_freeze_protection': state.freezeProtectionMode = Boolean(value); break;
+          case 'thermostat_fan_speed':
+            if (value === 'auto') state.fanSpeed = state.operationalMode === OPERATIONAL_MODE.AUTO ? FAN_SPEED.FIXED : FAN_SPEED.AUTO;
+            if (value === 'silent') state.fanSpeed = FAN_SPEED.SILENT;
+            if (value === 'low') state.fanSpeed = FAN_SPEED.LOW;
+            if (value === 'medium') state.fanSpeed = FAN_SPEED.MEDIUM;
+            if (value === 'high') state.fanSpeed = FAN_SPEED.HIGH;
+            if (value === 'full') state.fanSpeed = FAN_SPEED.FULL;
+            break;
+          case 'airco_swing':
+            state.swingMode = value ? SWING_MODE.VERTICAL : SWING_MODE.OFF;
+            break;
+          case 'airco_louver': {
+            const raw = LOUVER_VALUES[value] ?? 0;
+            await this._withLanTimeout(
+              'set louver position',
+              device => new SetPropertiesCommand(device, PROPERTY_ID.SWING_UD_ANGLE, raw).execute(),
+            );
+            this._lockCapability('airco_louver');
+            await this._refreshStateUnsafe();
+            return;
           }
-          break;
-        case 'thermostat_boost': state.turboMode = !!value; break;
-        case 'thermostat_eco': state.ecoMode = !!value; break;
-        case 'thermostat_freeze_protection': state.freezeProtectionMode = !!value; break;
-        case 'thermostat_fan_speed':
-          if (value === 'auto') state.fanSpeed = state.operationalMode === OPERATIONAL_MODE.AUTO ? FAN_SPEED.FIXED : FAN_SPEED.AUTO;
-          if (value === 'silent') state.fanSpeed = FAN_SPEED.SILENT;
-          if (value === 'low') state.fanSpeed = FAN_SPEED.LOW;
-          if (value === 'medium') state.fanSpeed = FAN_SPEED.MEDIUM;
-          if (value === 'high') state.fanSpeed = FAN_SPEED.HIGH;
-          if (value === 'full') state.fanSpeed = FAN_SPEED.FULL;
-          break;
-        case 'airco_swing': state.swingMode = value ? SWING_MODE.HORIZONTAL : SWING_MODE.OFF; break;
-        case 'airco_louver': {
-          const raw = LOUVER_VALUES[value] ?? 0;
-          if (raw !== 0 && state.swingMode === SWING_MODE.OFF) state.swingMode = SWING_MODE.HORIZONTAL;
-          await new SetPropertiesCommand(this._device, PROPERTY_ID.SWING_UD_ANGLE, raw).execute();
-          break;
+          case 'ieco':
+            await this._withLanTimeout('set iECO', device => new SetIEcoCommand(device, Boolean(value)).execute());
+            await this._refreshStateUnsafe();
+            return;
+          case 'jet_cool':
+            await this._withLanTimeout('set jet cool', device => new SetJetCoolCommand(device, Boolean(value)).execute());
+            await this._refreshStateUnsafe();
+            return;
+          case 'out_silent':
+            await this._withLanTimeout('set outdoor silent', device => new SetOutSilentCommand(device, Boolean(value)).execute());
+            await this._refreshStateUnsafe();
+            return;
+          case 'self_clean':
+            await this._withLanTimeout('set self clean', device => new SetSelfCleanCommand(device, Boolean(value)).execute());
+            this._lockCapability('self_clean', 15000);
+            await this._refreshStateUnsafe();
+            return;
+          case 'ion_mode': (state as any).anionMode = Boolean(value); break;
+          case 'follow_me': (state as any).followMe = Boolean(value); break;
+          default: return;
         }
-        case 'ieco':
-          await new SetIEcoCommand(this._device, !!value).execute();
-          return;
-        case 'jet_cool':
-          await new SetJetCoolCommand(this._device, !!value).execute();
-          return;
-        case 'out_silent':
-          await new SetOutSilentCommand(this._device, !!value).execute();
-          return;
-        case 'self_clean':
-          await new SetSelfCleanCommand(this._device, !!value).execute();
-          this._lockCapability('self_clean', 15000);
-          return;
-        case 'ion_mode': (state as any).anionMode = !!value; break;
-        case 'follow_me': (state as any).followMe = !!value; break;
-        default: return;
-      }
 
-      state = await new SetStateCommand(this._device, state).execute();
-      this._updateState(state);
-    } catch (error) {
-      this.error(error);
-      await this._refreshState();
-      throw new Error(`Error during adjustment of settings from device [${this.getName()}]`);
-    } finally {
-      this._updatingState = false;
+        state = await this._withLanTimeout(
+          `set ${capability}`,
+          device => new SetStateCommand(device, state).execute(),
+        );
+        this._updateState(state);
+      } catch (error) {
+        this.error(`Error applying capability '${capability}': ${error instanceof Error ? error.message : String(error)}`);
+        try {
+          await this._refreshStateUnsafe();
+        } catch (refreshError) {
+          this.error(`Refresh after capability error failed: ${refreshError instanceof Error ? refreshError.message : String(refreshError)}`);
+        }
+        throw new Error(`Error during adjustment of settings from device [${this.getName()}]`);
+      }
+    });
+  }
+
+  private async _runExclusive<T>(operation: () => Promise<T>): Promise<T> {
+    const run = this._commandQueue.catch((): undefined => undefined).then(operation);
+    this._commandQueue = run.then((): undefined => undefined, (): undefined => undefined);
+    return run;
+  }
+
+  private async _withLanTimeout<T>(label: string, operation: (device: MDevice) => Promise<T>): Promise<T> {
+    let lastError: unknown;
+
+    for (let attempt = 1; attempt <= LAN_OPERATION_ATTEMPTS; attempt++) {
+      const attemptDevice = this._device;
+      let timer: NodeJS.Timeout | undefined;
+
+      try {
+        const result = await Promise.race([
+          (async () => {
+            const context = this._getStoredLanSecurityContext();
+            if (!context) throw new Error('Missing LAN token or key');
+            await attemptDevice.authenticate(context);
+            return operation(attemptDevice);
+          })(),
+          new Promise<T>((_resolve, reject) => {
+            timer = this.homey.setTimeout(() => {
+              this._closeLanConnection(attemptDevice);
+              reject(new Error(`${label} timed out after ${LAN_OPERATION_TIMEOUT_MS}ms`));
+            }, LAN_OPERATION_TIMEOUT_MS);
+          }),
+        ]);
+
+        this._resetLanDevice();
+        return result;
+      } catch (error) {
+        lastError = error;
+        this._closeLanConnection(attemptDevice);
+        this._resetLanDevice();
+        this.error(`LAN ${label} failed on attempt ${attempt}/${LAN_OPERATION_ATTEMPTS}: ${error instanceof Error ? error.message : String(error)}`);
+      } finally {
+        if (timer) this.homey.clearTimeout(timer);
+      }
     }
+
+    throw lastError instanceof Error ? lastError : new Error(String(lastError));
   }
 
   async onSettings({ newSettings, changedKeys }: { oldSettings: any; newSettings: any; changedKeys: string[] }) {
@@ -384,8 +563,9 @@ export class MideaDevice extends Homey.Device {
   }
 
   async onDeleted() {
-    if (this._intervalId) this.homey.clearInterval(this._intervalId);
-    if (this._energyIntervalId) this.homey.clearInterval(this._energyIntervalId);
+    this._stopPolling();
+    this._stopEnergyPolling();
+    this._closeLanConnection();
   }
 }
 
